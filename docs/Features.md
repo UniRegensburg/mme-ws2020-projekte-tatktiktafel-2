@@ -13,7 +13,10 @@
 | **Radierfunktion** | Die eingezeichneten Spielerbewegungen können mit dem Radiergummitool gelöscht werden. Außerdem gibt es die Möglichkeit alle bisherigen Markierungen zu löschen | hoch | 2 Tage | Taktikeditor |
 | **Zoomfunktion auf Map** | Mit Hilfe des Mausrads kann in die gewählte Map gezoomt werden | nice-to-have | 1 Tag | Dashboard / Canvas |
 | **Map-Archiv** | Den Benutzern wird eine Auswahl an Maps gestellt die über ein Dropdown-Menü gewählt werden können | hoch | 1 Tag | Hauptnavigation über Canvas |
+| **Undo-Redo** | Die eingezeichneten Spielerbewegungen und können rückgängig gemacht werden oder wiederhergestellt werden | hoch | 2 Tag | Hauptnavigation über Taktikeditor 
 
 ## Umsetzung
 
 [Beschreiben Sie kurz das geplante Vorgehen bei der Umsetzung der Features. Entwerfen Sie dazu ein oder mehrere *Vertical Slices* anhand derer Sie den zentralen *Use Case* der Anwendung implementieren werden. Geben Sie an, wann welche Funktionen (und in welchem Vollständigkeitsgrad) implementiert werden. Begründen Sie kurz die gewählte Reihenfolge. ]
+
+
