@@ -17,6 +17,6 @@
 
 ## Umsetzung
 
-[Beschreiben Sie kurz das geplante Vorgehen bei der Umsetzung der Features. Entwerfen Sie dazu ein oder mehrere *Vertical Slices* anhand derer Sie den zentralen *Use Case* der Anwendung implementieren werden. Geben Sie an, wann welche Funktionen (und in welchem Vollständigkeitsgrad) implementiert werden. Begründen Sie kurz die gewählte Reihenfolge. ]
+Ein E-Sport Team trifft sich auf der Landingpage der Anwendung. Dort kann ein Link generiert werden mit dem sich das Team in einer privaten Lobby treffen kann. Mit Hilfe der Dropdown-Auswahl kann die Map des nächsten Matches ausgewählt werden. Nun können die Spieler die einzelnen Bewegungen und Spielzüge einzeichnen. Spezielle Spielevents wie Utlitiy-Einsatz kann mit dem Stempel oder der Quickselect Icons in der Toolbar des Taktikeditors in der Map platziert werden. Falls sich das Team uneinig ist, können die letzten Spielzüge mit der Undo-Funktion wieder rückgängig gemacht werden.  
 
 
