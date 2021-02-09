@@ -4,15 +4,15 @@
 
 | Feature | Beschreibung | Priorität | Geschätzter Aufwand | Betroffene Schichten |
 |---------|--------------|-----------|--------------------|---------------------|
-| **Dateiupload** | Die User haben die Möglichkeit Bilddateien hochzuladen  | hoch | 1 Tag | [Betroffene Bereiche/Schichten der Anwendung] |
-| **Zeichenfunktion** | Pinsel Funktion mit verschiedenen Farben | kritisch | [Initial geschätzer Aufwand für die vollständige Implementierung des Features, z.B. "2 Tage"] | [Betroffene Bereiche/Schichten der Anwendung] |
-| **Drag & Drop von Objekten** | [Beschreibung] | [Priorisierung, z.B. "kritisch", "hoch", "nice-to-have"] | [Initial geschätzer Aufwand für die vollständige Implementierung des Features, z.B. "2 Tage"] | [Betroffene Bereiche/Schichten der Anwendung] |
+| **Dateiupload** | Die User haben die Möglichkeit Bilddateien hochzuladen  | hoch | 1 Tag | Hauptnavigation über Canvas |
+| **Zeichenfunktion** | Pinsel Funktion mit verschiedenen Farben | kritisch | 3 Tage | Taktikeditor |
+| **Drag & Drop von Objekten** | Alle nötigen Spielelemente sind auch in Form von Icons mit Hilfe von Drag and Drop auf der Map platzierbar | medium | 2 Tage | Toolbar im Dashboard |
 | **Stempelfunktion (Vorgefertigte Icons)** | Vorgefertigte Spielelemente können in Form von Icons mit dem Stempel auf der Taktiktafel platziert werden. | kritisch | 2 Tage | Dashboard / Map |
-| **Aktive User anzeigen** | Alle aktiven User werden im Dashboard angezeigt | [Priorisierung, z.B. "kritisch", "hoch", "nice-to-have"] | [Initial geschätzer Aufwand für die vollständige Implementierung des Features, z.B. "2 Tage"] | [Betroffene Bereiche/Schichten der Anwendung] |
+| **Aktive User anzeigen** | Alle aktiven User werden im Dashboard angezeigt | nice-to-have | 2 Tage | Dashboard |
 | **Lobbysystem** | Die User können sich in einer privaten Lobby treffen (ggf. per Link) | hoch | 3 Tage | Dashboard |
-| **Radierfunktion** | Die eingezeichneten Spielerbewegungen können mit dem Radiergummitool gelöscht werden. Außerdem gibt es die Möglichkeit alle bisherigen Markierungen zu löschen | hoch | 2 Tage | [Betroffene Bereiche/Schichten der Anwendung] |
+| **Radierfunktion** | Die eingezeichneten Spielerbewegungen können mit dem Radiergummitool gelöscht werden. Außerdem gibt es die Möglichkeit alle bisherigen Markierungen zu löschen | hoch | 2 Tage | Taktikeditor |
 | **Zoomfunktion auf Map** | Mit Hilfe des Mausrads kann in die gewählte Map gezoomt werden | nice-to-have | 1 Tag | Dashboard / Canvas |
-| **Map-Archiv** | Den Benutzern wird eine Auswahl an Maps gestellt die über ein Dropdown-Menü gewählt werden können | hoch | 1 Tag | [Betroffene Bereiche/Schichten der Anwendung] |
+| **Map-Archiv** | Den Benutzern wird eine Auswahl an Maps gestellt die über ein Dropdown-Menü gewählt werden können | hoch | 1 Tag | Hauptnavigation über Canvas |
 
 ## Umsetzung
 
