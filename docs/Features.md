@@ -19,4 +19,4 @@
 
 Ein E-Sport Team trifft sich auf der Landingpage der Anwendung. Dort kann ein Link generiert werden mit dem sich das Team in einer privaten Lobby treffen kann. Mit Hilfe der Dropdown-Auswahl kann die Map des nächsten Matches ausgewählt werden. Nun können die Spieler die einzelnen Bewegungen und Spielzüge einzeichnen. Spezielle Spielevents wie Utlitiy-Einsatz kann mit dem Stempel oder der Quickselect Icons in der Toolbar des Taktikeditors in der Map platziert werden. Falls sich das Team uneinig ist, können die letzten Spielzüge mit der Undo-Funktion wieder rückgängig gemacht werden.  
 
-
+## Reihenfolge
