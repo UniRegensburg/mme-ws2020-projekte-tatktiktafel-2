@@ -4,7 +4,14 @@
 
 | Feature | Beschreibung | Priorität | Geschätzter Aufwand | Betroffene Schichten |
 |---------|--------------|-----------|--------------------|---------------------|
-| **[Feature-Title]** | [Beschreibung] | [Priorisierung, z.B. "kritisch", "hoch", "nice-to-have"] | [Initial geschätzer Aufwand für die vollständige Implementierung des Features, z.B. "2 Tage"] | [Betroffene Bereiche/Schichten der Anwendung] |
+| **Dateiupload** | [Beschreibung] | [Priorisierung, z.B. "kritisch", "hoch", "nice-to-have"] | [Initial geschätzer Aufwand für die vollständige Implementierung des Features, z.B. "2 Tage"] | [Betroffene Bereiche/Schichten der Anwendung] |
+| **Zeichenfunktion** | [Beschreibung] | [Priorisierung, z.B. "kritisch", "hoch", "nice-to-have"] | [Initial geschätzer Aufwand für die vollständige Implementierung des Features, z.B. "2 Tage"] | [Betroffene Bereiche/Schichten der Anwendung] |
+| **Drag & Drop von Objekten** | [Beschreibung] | [Priorisierung, z.B. "kritisch", "hoch", "nice-to-have"] | [Initial geschätzer Aufwand für die vollständige Implementierung des Features, z.B. "2 Tage"] | [Betroffene Bereiche/Schichten der Anwendung] |
+| **Stempelfunktion (Vorgefertigte Icons)** | [Beschreibung] | [Priorisierung, z.B. "kritisch", "hoch", "nice-to-have"] | [Initial geschätzer Aufwand für die vollständige Implementierung des Features, z.B. "2 Tage"] | [Betroffene Bereiche/Schichten der Anwendung] |
+| **Aktive User anzeigen** | [Beschreibung] | [Priorisierung, z.B. "kritisch", "hoch", "nice-to-have"] | [Initial geschätzer Aufwand für die vollständige Implementierung des Features, z.B. "2 Tage"] | [Betroffene Bereiche/Schichten der Anwendung] |
+| **Lobbysystem** | [Beschreibung] | [Priorisierung, z.B. "kritisch", "hoch", "nice-to-have"] | [Initial geschätzer Aufwand für die vollständige Implementierung des Features, z.B. "2 Tage"] | [Betroffene Bereiche/Schichten der Anwendung] |
+| **Radierfunktion** | [Beschreibung] | [Priorisierung, z.B. "kritisch", "hoch", "nice-to-have"] | [Initial geschätzer Aufwand für die vollständige Implementierung des Features, z.B. "2 Tage"] | [Betroffene Bereiche/Schichten der Anwendung] |
+| **Zoomfunktion auf Map** | [Beschreibung] | [Priorisierung, z.B. "kritisch", "hoch", "nice-to-have"] | [Initial geschätzer Aufwand für die vollständige Implementierung des Features, z.B. "2 Tage"] | [Betroffene Bereiche/Schichten der Anwendung] |
 
 ## Umsetzung
 
