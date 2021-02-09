@@ -4,7 +4,7 @@
 
 | Feature | Beschreibung | Priorität | Geschätzter Aufwand | Betroffene Schichten |
 |---------|--------------|-----------|--------------------|---------------------|
-| **Dateiupload** | [Beschreibung] | [Priorisierung, z.B. "kritisch", "hoch", "nice-to-have"] | [Initial geschätzer Aufwand für die vollständige Implementierung des Features, z.B. "2 Tage"] | [Betroffene Bereiche/Schichten der Anwendung] |
+| **Dateiupload** | Die User haben die Möglichkeit Bilddateien hochzuladen  | [Priorisierung, z.B. "kritisch", "hoch", "nice-to-have"] | [Initial geschätzer Aufwand für die vollständige Implementierung des Features, z.B. "2 Tage"] | [Betroffene Bereiche/Schichten der Anwendung] |
 | **Zeichenfunktion** | [Beschreibung] | [Priorisierung, z.B. "kritisch", "hoch", "nice-to-have"] | [Initial geschätzer Aufwand für die vollständige Implementierung des Features, z.B. "2 Tage"] | [Betroffene Bereiche/Schichten der Anwendung] |
 | **Drag & Drop von Objekten** | [Beschreibung] | [Priorisierung, z.B. "kritisch", "hoch", "nice-to-have"] | [Initial geschätzer Aufwand für die vollständige Implementierung des Features, z.B. "2 Tage"] | [Betroffene Bereiche/Schichten der Anwendung] |
 | **Stempelfunktion (Vorgefertigte Icons)** | [Beschreibung] | [Priorisierung, z.B. "kritisch", "hoch", "nice-to-have"] | [Initial geschätzer Aufwand für die vollständige Implementierung des Features, z.B. "2 Tage"] | [Betroffene Bereiche/Schichten der Anwendung] |
