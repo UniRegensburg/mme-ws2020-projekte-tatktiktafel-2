@@ -5,7 +5,7 @@
 | Feature | Beschreibung | Priorität | Geschätzter Aufwand | Betroffene Schichten |
 |---------|--------------|-----------|--------------------|---------------------|
 | **Dateiupload** | Die User haben die Möglichkeit Bilddateien hochzuladen  | hoch | 1 Tag | [Betroffene Bereiche/Schichten der Anwendung] |
-| **Zeichenfunktion** | Pinsel Funktion mit verschiedenen Farben | [Priorisierung, z.B. "kritisch", "hoch", "nice-to-have"] | [Initial geschätzer Aufwand für die vollständige Implementierung des Features, z.B. "2 Tage"] | [Betroffene Bereiche/Schichten der Anwendung] |
+| **Zeichenfunktion** | Pinsel Funktion mit verschiedenen Farben | kritisch | [Initial geschätzer Aufwand für die vollständige Implementierung des Features, z.B. "2 Tage"] | [Betroffene Bereiche/Schichten der Anwendung] |
 | **Drag & Drop von Objekten** | [Beschreibung] | [Priorisierung, z.B. "kritisch", "hoch", "nice-to-have"] | [Initial geschätzer Aufwand für die vollständige Implementierung des Features, z.B. "2 Tage"] | [Betroffene Bereiche/Schichten der Anwendung] |
 | **Stempelfunktion (Vorgefertigte Icons)** | [Beschreibung] | [Priorisierung, z.B. "kritisch", "hoch", "nice-to-have"] | [Initial geschätzer Aufwand für die vollständige Implementierung des Features, z.B. "2 Tage"] | [Betroffene Bereiche/Schichten der Anwendung] |
 | **Aktive User anzeigen** | Alle aktiven User werden im Dashboard angezeigt | [Priorisierung, z.B. "kritisch", "hoch", "nice-to-have"] | [Initial geschätzer Aufwand für die vollständige Implementierung des Features, z.B. "2 Tage"] | [Betroffene Bereiche/Schichten der Anwendung] |
