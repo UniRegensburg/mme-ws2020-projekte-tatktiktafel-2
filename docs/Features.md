@@ -5,10 +5,10 @@
 | Feature | Beschreibung | Priorität | Geschätzter Aufwand | Betroffene Schichten |
 |---------|--------------|-----------|--------------------|---------------------|
 | **Dateiupload** | Die User haben die Möglichkeit Bilddateien hochzuladen  | hoch | 1 Tag | [Betroffene Bereiche/Schichten der Anwendung] |
-| **Zeichenfunktion** | Pinsel Funktion mit verschiedenen Farben | kritisch | 4 Tage | [Betroffene Bereiche/Schichten der Anwendung] |
+| **Zeichenfunktion** | Pinsel Funktion mit verschiedenen Farben | kritisch | [Initial geschätzer Aufwand für die vollständige Implementierung des Features, z.B. "2 Tage"] | [Betroffene Bereiche/Schichten der Anwendung] |
 | **Drag & Drop von Objekten** | [Beschreibung] | [Priorisierung, z.B. "kritisch", "hoch", "nice-to-have"] | [Initial geschätzer Aufwand für die vollständige Implementierung des Features, z.B. "2 Tage"] | [Betroffene Bereiche/Schichten der Anwendung] |
-| **Stempelfunktion (Vorgefertigte Icons)** | [Beschreibung] | [Priorisierung, z.B. "kritisch", "hoch", "nice-to-have"] | [Initial geschätzer Aufwand für die vollständige Implementierung des Features, z.B. "2 Tage"] | [Betroffene Bereiche/Schichten der Anwendung] |
-| **Aktive User anzeigen** | Alle aktiven User werden im Dashboard angezeigt | kritisch | 2 Tage | [Betroffene Bereiche/Schichten der Anwendung] |
+| **Stempelfunktion (Vorgefertigte Icons)** | Vorgefertigte Spielelemente können in Form von Icons mit dem Stempel auf der Taktiktafel platziert werden. | kritisch | 2 Tage | Dashboard / Map |
+| **Aktive User anzeigen** | Alle aktiven User werden im Dashboard angezeigt | [Priorisierung, z.B. "kritisch", "hoch", "nice-to-have"] | [Initial geschätzer Aufwand für die vollständige Implementierung des Features, z.B. "2 Tage"] | [Betroffene Bereiche/Schichten der Anwendung] |
 | **Lobbysystem** | Die User können sich in einer privaten Lobby treffen (ggf. per Link) | hoch | 3 Tage | Dashboard |
 | **Radierfunktion** | Die eingezeichneten Spielerbewegungen können mit dem Radiergummitool gelöscht werden. Außerdem gibt es die Möglichkeit alle bisherigen Markierungen zu löschen | hoch | 2 Tage | [Betroffene Bereiche/Schichten der Anwendung] |
 | **Zoomfunktion auf Map** | Mit Hilfe des Mausrads kann in die gewählte Map gezoomt werden | nice-to-have | 1 Tag | Dashboard / Canvas |
