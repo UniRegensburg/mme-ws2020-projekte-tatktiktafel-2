@@ -14,6 +14,7 @@
 | **Zoomfunktion auf Map** | Mit Hilfe des Mausrads kann in die gewählte Map gezoomt werden | nice-to-have | 1 Tag | Dashboard / Canvas |
 | **Map-Archiv** | Den Benutzern wird eine Auswahl an Maps gestellt die über ein Dropdown-Menü gewählt werden können | hoch | 1 Tag | Hauptnavigation über Canvas |
 | **Undo-Redo** | Die eingezeichneten Spielerbewegungen und können rückgängig gemacht werden oder wiederhergestellt werden | hoch | 2 Tag | Hauptnavigation über Taktikeditor 
+| **Timeline-Funktion** | Einzelne Spielstände können mit Timecode als "Stand" gespeichert werden  | hoch | 2 Tage | Hauptnavigation unter Taktikeditor 
 
 ## Umsetzung
 
