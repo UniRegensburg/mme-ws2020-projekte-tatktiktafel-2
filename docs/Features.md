@@ -4,7 +4,6 @@
 
 | Feature | Beschreibung | Priorität | Geschätzter Aufwand | Betroffene Schichten |
 |---------|--------------|-----------|--------------------|---------------------|
-| **Dateiupload** | Die User haben die Möglichkeit Bilddateien hochzuladen  | hoch | 1 Tag | Hauptnavigation über Canvas |
 | **Zeichenfunktion** | Pinsel Funktion mit verschiedenen Farben | kritisch | 3 Tage | Taktikeditor |
 | **Drag & Drop von Objekten** | Alle nötigen Spielelemente sind auch in Form von Icons mit Hilfe von Drag and Drop auf der Map platzierbar | medium | 2 Tage | Toolbar im Dashboard |
 | **Stempelfunktion (Vorgefertigte Icons)** | Vorgefertigte Spielelemente können in Form von Icons mit dem Stempel auf der Taktiktafel platziert werden. | kritisch | 2 Tage | Dashboard / Map |
