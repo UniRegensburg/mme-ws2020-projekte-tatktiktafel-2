@@ -4,8 +4,9 @@
 
 * Link zu Lobby generieren
 * Canvas drag & drop (Übung 3)
-* Stack für Undo und Timeline]
+* Stack für Undo und Timeline
 * "Rechte" für Teamleader vergeben + abtreten
+* Update für User / Kommunikation 
 * React sinnvoll? + Für was
 * Angular sinnvoll? - Für was
-
+* NTH - Laufwege mit Zeitangabe
