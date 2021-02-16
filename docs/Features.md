@@ -27,9 +27,9 @@ Ein E-Sport Team trifft sich auf der Landingpage der Anwendung. Dort kann ein Li
   - Die aktiven Nutzer sollten hier bereits angezeigt werden  
 2. 
   - Die interaktiven Hauptfunktionen der Anwendung:
-  a) Zeichnen per Pinsel (verschiedenen Farben, Pinselgröße, etc.)
-  b) Wählen und Einfügen von Tokens mit Drag & Drop
-  c) Radiergummi-Tool
+  - Zeichnen per Pinsel (verschiedenen Farben, Pinselgröße, etc.)
+  - Wählen und Einfügen von Tokens mit Drag & Drop
+  - Radiergummi-Tool
   - Parallel dazu muss auch die Undo/Redo Funktion implementiert werden
 3.
   - Map Archiv (ähnelt grundsätzlich dem Bilder-Upload)  
