@@ -31,6 +31,7 @@
 Website wird zur Bearbeitung zweigeteilt. Erster Bearbeitungsstrang beinhaltet Welcome Screen mit Begrüßung, Dateneingabe und Verteilung in Räume, wobei auf die oben gennanten Frameworks und Libarys eingegangen wird. Einteilung in Räume entweder durch spezifische Links oder dynamisch. Zweiter Teil beinhaltet die Bearbeitung und alle Zeichenfunktionen. Hierbei kann wieder in verschiedene Module geteilt werden. Redo Funktion mit Anzeige am unteren Bildschirmrand, MapAuswahl sowie Up and Download, sowie Zeichefunktionen. Rad wird nicht neu erfunden, sondern den entsprechenden Anforderungen angepasst.
 
 
+Siehe Prototyp Version 1 in Assets.
 
 
 
