@@ -5,9 +5,8 @@
 | **Zeichenfunktion** | Pinsel Funktion mit verschiedenen Farben | kritisch | 3 Tage | Taktikeditor |
 | **Drag & Drop von Objekten** | Alle nötigen Spielelemente sind auch in Form von Icons mit Hilfe von Drag and Drop auf der Map platzierbar | medium | 2 Tage | Toolbar im Dashboard |
 | **Tokens (Vorgefertigte Icons)** | Vorgefertigte Spielelemente können in Form von Icons mit als Tokens auf der Taktiktafel platziert werden. | kritisch | 2 Tage | Dashboard / Map |
-| **Zeitangabe** |  | kritisch | |  |
 | **Aktive User anzeigen** | Alle aktiven User werden im Dashboard angezeigt | nice-to-have | 2 Tage | Dashboard |
-| **Lobbysystem** | Die User können sich in einer privaten Lobby treffen (ggf. per Link) | hoch | 3 Tage | Dashboard |
+| **Lobbysystem** | Die User können sich in einer privaten Lobby treffen (ggf. per Link) wobei das "Zeichner Recht" zwischen den Usern vergeben werden kann| hoch | 3 Tage | Dashboard |
 | **Radierfunktion** | Die eingezeichneten Spielerbewegungen können mit dem Radiergummitool gelöscht werden. Außerdem gibt es die Möglichkeit alle bisherigen Markierungen zu löschen | hoch | 2 Tage | Taktikeditor |
 | **Zoomfunktion auf Map** | Mit Hilfe des Mausrads kann in die gewählte Map gezoomt werden | nice-to-have | 1 Tag | Dashboard / Canvas |
 | **Map-Archiv** | Den Benutzern wird eine Auswahl an Maps gestellt die über ein Dropdown-Menü gewählt werden können | hoch | 1 Tag | Hauptnavigation über Canvas |
