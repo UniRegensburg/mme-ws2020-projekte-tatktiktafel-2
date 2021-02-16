@@ -9,4 +9,3 @@
 * Update für User / Kommunikation 
 * React sinnvoll? + Für was
 * Angular sinnvoll? - Für was
-* NTH - Laufwege mit Zeitangabe
