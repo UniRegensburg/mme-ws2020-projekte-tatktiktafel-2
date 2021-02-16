@@ -6,7 +6,8 @@
 |---------|--------------|-----------|--------------------|---------------------|
 | **Zeichenfunktion** | Pinsel Funktion mit verschiedenen Farben | kritisch | 3 Tage | Taktikeditor |
 | **Drag & Drop von Objekten** | Alle nötigen Spielelemente sind auch in Form von Icons mit Hilfe von Drag and Drop auf der Map platzierbar | medium | 2 Tage | Toolbar im Dashboard |
-| **Stempelfunktion (Vorgefertigte Icons)** | Vorgefertigte Spielelemente können in Form von Icons mit dem Stempel auf der Taktiktafel platziert werden. | kritisch | 2 Tage | Dashboard / Map |
+| **Tokens (Vorgefertigte Icons)** | Vorgefertigte Spielelemente können in Form von Icons mit als Tokens auf der Taktiktafel platziert werden. | kritisch | 2 Tage | Dashboard / Map |
+| **Zeitangabe** |  | kritisch | |  |
 | **Aktive User anzeigen** | Alle aktiven User werden im Dashboard angezeigt | nice-to-have | 2 Tage | Dashboard |
 | **Lobbysystem** | Die User können sich in einer privaten Lobby treffen (ggf. per Link) | hoch | 3 Tage | Dashboard |
 | **Radierfunktion** | Die eingezeichneten Spielerbewegungen können mit dem Radiergummitool gelöscht werden. Außerdem gibt es die Möglichkeit alle bisherigen Markierungen zu löschen | hoch | 2 Tage | Taktikeditor |
@@ -17,8 +18,18 @@
 
 ## Umsetzung
 
-Ein E-Sport Team trifft sich auf der Landingpage der Anwendung. Dort kann ein Link generiert werden mit dem sich das Team in einer privaten Lobby treffen kann. Mit Hilfe der Dropdown-Auswahl kann die Map des nächsten Matches ausgewählt werden. Nun können die Spieler die einzelnen Bewegungen und Spielzüge einzeichnen. Spezielle Spielevents wie Utlitiy-Einsatz kann mit dem Stempel oder der Quickselect Icons in der Toolbar des Taktikeditors in der Map platziert werden. Falls sich das Team uneinig ist, können die letzten Spielzüge mit der Undo-Funktion wieder rückgängig gemacht werden.  
+Ein E-Sport Team trifft sich auf der Landingpage der Anwendung. Dort kann ein Link generiert werden mit dem sich das Team in einer privaten Lobby treffen kann. Mit Hilfe der Dropdown-Auswahl kann die Map des nächsten Matches ausgewählt werden. Nun können die Spieler die einzelnen Bewegungen und Spielzüge einzeichnen. Spezielle Spielevents wie Utlitiy-Einsatz kann mit dem Tokens oder der Quickselect Icons in der Toolbar des Taktikeditors in der Map platziert werden. Falls sich das Team uneinig ist, können die letzten Spielzüge mit der Undo-Funktion wieder rückgängig gemacht werden.  
 
 ## Reihenfolge
 
-Zu Beginn muss das Lobbysystem und der Canvas mit Bilder-Upload/Zoom Funktion entwickelt und implementiert werden, wobei hier auch schon die aktiven Nutzer angezeigt werden sollten. Sind diese funktionstüchtig, kommen als nächstes die interaktiven Hauptfunktionen der Anwendung, also das Zeichnen per Pinsel (verschiedenen Farben, Pinselgröße, etc.), Wählen und Einfügen von Stempeln mit Drag & Drop sowie das Radiergummi-Tool. Parallel dazu muss auch die Undo/Redo Funktion implementiert werden, welche auf Button-Press den letzten Bearbeitungsschritt Rückgängig macht bzw. wiederholt. Zuletzt muss noch das Map Archiv erstellt werden, welches grundsätzlich dem Bilder-Upload ähnelt. 
+1. 
+  - Das Lobbysystem und der Canvas mit Bilder-Upload/Zoom Funktion entwickelt und implementieren 
+  - Die aktiven Nutzer sollten hier bereits angezeigt werden  
+2. 
+  - Die interaktiven Hauptfunktionen der Anwendung:
+    a) Zeichnen per Pinsel (verschiedenen Farben, Pinselgröße, etc.)
+    b) Wählen und Einfügen von Tokens mit Drag & Drop
+    c) Radiergummi-Tool
+  - Parallel dazu muss auch die Undo/Redo Funktion implementiert werden
+3.
+  - Map Archiv (ähnelt grundsätzlich dem Bilder-Upload)  
