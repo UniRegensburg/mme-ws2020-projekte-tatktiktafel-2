@@ -7,11 +7,6 @@
 
   Zur einfacheren Programmierung und Vereinfachung von Abläufen
   Simple Einbindung durch CDN oder lokal
-
-- (Vue.js)
-
- Sollte ein größeres Framwork erwünscht sein, wäre dies eine Möglichkeit
- Vorteil einer SinglePageDesign Solution
  
 - WebRTC
  
