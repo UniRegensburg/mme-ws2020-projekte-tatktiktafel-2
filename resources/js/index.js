@@ -1,63 +1,12 @@
 /* eslint-env browser */
 
-import ApiClient from "./net/ApiClient.js";
-import Canvas from "./ui/Canvas.js";
-import Toolbar from "./ui/Toolbar.js";
-
-var canvas,
-    toolbar,
-    textInput;
+const SEARCH_URL = "https://api.thecatapi.com/v1/images/search",
+    AVAILABLE_FONT_COLORS = ["#FFF", "#000"],
+    AVAILABLE_FONT_SIZES = ["14px", "24px", "36px", "48px", "72px", "96px", "144px"],
+    AVAILABLE_FONTS = ["Arial", "Verdana", "Helvetica", "Tahoma", "Trebuchet MS", "Times New Roman", "Georgia", "Garamond", "Courier New", "Brush Script MT"];
 
 function init() {
-    canvas = new Canvas(".generator canvas");
-    toolbar = new Toolbar(".generator .menu", onButtonClicked);
-    textInput = document.querySelector("input");
-    textInput.addEventListener("change", onTextChanged);
-    hideTextInput();
-    reloadImage();
-}
-
-function hideTextInput() {
-    textInput.classList.add("hidden");
-    textInput.value = "";
-}
-
-function showTextInput() {
-    textInput.classList.remove("hidden");
-    textInput.focus();
-}
-
-async function reloadImage() {
-    let image = await ApiClient.getRandomImage();
-    canvas.setImage(image);
-}
-
-function onTextChanged() {
-    canvas.setText(textInput.value);
-    hideTextInput();
-}
-
-function onButtonClicked(action) {
-    switch (action) {
-        case "reload":
-            reloadImage();
-            break;
-        case "write":
-            showTextInput();
-            break;
-        case "font":
-            canvas.changeFont();
-            break;
-        case "fontColor":
-            canvas.changeFontColor();
-            break;
-        case "fontSize":
-            canvas.changeFontSize();
-            break;
-        default:
-            break;
-
-    }
+    console.log("### Cat-Meme-Generator ###");
 }
 
 init();

@@ -4,15 +4,15 @@ html {
 }
 
 :root {
-    --rose-madder: #db2b39;
-    --space-cadet: #29335c;
-    --marigold: #f3a712;
-    --deep-champange: #f0cea0;
-    --dark-lava: #534d41;
+    --rose-madder: #677487;
+    --space-cadet: #677487;
+    --marigold: #1f242a;
+    --deep-champange: #1f242a;
+    --dark-lava: #ffac3e;
 }
 
 body {
-    font-family: "Yusei Magic", sans-serif;
+    font-family: "Roboto", sans-serif;
     margin: 0;
     padding: 0;
     background: var(--deep-champange);
