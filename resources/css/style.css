@@ -1,0 +1,90 @@
+html {
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --rose-madder: #db2b39;
+    --space-cadet: #29335c;
+    --marigold: #f3a712;
+    --deep-champange: #f0cea0;
+    --dark-lava: #534d41;
+}
+
+body {
+    font-family: "Yusei Magic", sans-serif;
+    margin: 0;
+    padding: 0;
+    background: var(--deep-champange);
+}
+
+.hidden {
+    display: none !important;
+}
+
+h1 {
+    margin: 2vh 0;
+    font-size: 4em;
+    color: var(--space-cadet);
+    text-align: center;
+}
+
+.generator {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 50vw;
+    margin: 0 auto;
+}
+
+.generator .canvas-area {}
+
+.generator canvas {
+    display: block;
+    width: 30vw;
+    height: 30vw;
+    border-style: solid;
+    border-width: 0.25vw;
+    border-color: var(--rose-madder);
+}
+
+.generator input {
+    position: relative;
+    display: block;
+    outline: none;
+    border: none;
+    height: 4vh;
+    width: 30.25vw;
+    top: -30.25vw;
+    background-color: var(--rose-madder);
+    color: var(--deep-champange);
+    line-height: 4vh;
+    font-size: 1em;
+    text-align: center;
+}
+
+.generator ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.generator ul li {
+    margin: 1vw;
+    width: 3vw;
+    height: 3vw;
+    border-radius: 50%;
+    background-color: var(--rose-madder);
+    line-height: 3vw;
+    text-align: center;
+    font-size: 1vw;
+    color: var(--deep-champange);
+}
+
+.generator ul li:not(.disabled):hover {
+    cursor: pointer;
+    background-color: var(--space-cadet);
+}
+
+.generator ul li.disabled {
+    background-color: var(--dark-lava);
+}
