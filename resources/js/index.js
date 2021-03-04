@@ -2,7 +2,7 @@
 
 
 function init() {
-    console.log("TaktikZzz");
+    console.log("..");
 }
 
 init();
