@@ -1,16 +1,29 @@
 {
-    "name": "flurfunk",
-    "version": "0.0.1",
-    "description": "A simple Node.js based microblogging service",
-    "main": "index.js",
-    "type": "module",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "http-server -o -c-1"
-    },
-    "author": "Alexander Bazo <alexanderbazo@googlemail.com>",
-    "license": "MIT",
-    "dependencies": {
-        "http-server": "^0.12.3"
-    }
+  "name": "flurfunk",
+  "version": "0.0.1",
+  "description": "A simple Node.js based microblogging service",
+  "main": "index.js",
+
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "http-server -o -c-1"
+  },
+  "author": "Alexander Bazo <alexanderbazo@googlemail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "http": "0.0.1-security",
+    "http-server": "^0.12.3",
+    "uuid": "^8.3.2",
+    "ws": "^7.4.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UniRegensburg/mme-ws2020-projekte-tatktiktafel-2.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/UniRegensburg/mme-ws2020-projekte-tatktiktafel-2/issues"
+  },
+  "homepage": "https://github.com/UniRegensburg/mme-ws2020-projekte-tatktiktafel-2#readme"
 }

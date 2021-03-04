@@ -137,16 +137,16 @@ function move(e) {
                 force: force,
                 color: color
             });
-            /*
-                        broadcast(JSON.stringify({
+            
+                       /* broadcast(JSON.stringify({
                             event: 'draw',
                             lastPoint,
                             x: e.offsetX,
                             y: e.offsetY,
                             force: force,
                             color: color
-                        }));
-                        */
+                        }));*/
+                        
         } else if (activeTool === 'rect') {
             let origin = {
                 x: Math.min(originPoint.x, e.offsetX),
