@@ -1,0 +1,16 @@
+{
+    "name": "flurfunk",
+    "version": "0.0.1",
+    "description": "A simple Node.js based microblogging service",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "http-server -o -c-1"
+    },
+    "author": "Alexander Bazo <alexanderbazo@googlemail.com>",
+    "license": "MIT",
+    "dependencies": {
+        "http-server": "^0.12.3"
+    }
+}

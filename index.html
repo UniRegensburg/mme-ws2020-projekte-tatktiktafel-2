@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taktiktafel 2</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <!-- MIT ARIAL GETAUSCHT-->
+    <link href="https://fonts.googleapis.com/css2?family=Yusei+Magic&display=swap" rel="stylesheet">
+    <!--ICONS NEU-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css">
+    <link rel="stylesheet" type="text/css" href="vendors/fontello/css/fontello.css" />
+    <link rel="stylesheet" type="text/css" href="resources/css/style.css" />
+
+</head>
+
+<body>
+    <h1>Taktiktafel 2</h1>
+    <div class="tacticalboard">
+        <ul class="menu">
+
+            <li>
+                <a class="icon-link active center" data-tool="pencil"><i class="ri-lg ri-pencil-fill"></i></a>
+            </li>
+
+            <li>
+                <a class="icon-link center" data-tool="rect"><i class="ri-lg ri-shape-line"></i></a>
+            </li>
+
+            <li>
+                <a class="icon-link center" data-tool="circle"><i class="ri-lg ri-checkbox-blank-circle-line"></i></a>
+            </li>
+
+            <li>
+                <a class="icon-link center" data-tool="text"><i class="ri-lg ri-font-size-2"></i></a>
+            </li>
+
+            <li>
+                <div class="relative">
+                    <a class="icon-link center" data-color="#33ffff">
+                        <i class="ri-lg ri-palette-line"></i>
+                        <i class="ri-lg ri-checkbox-blank-fill center"></i>
+                    </a>
+                    <div id="color-picker" class="dropdown vstack">
+                    </div>
+                </div>
+            </li>
+
+        </ul>
+        <div class="spacer app">
+            <!--canvas 1-->
+            <canvas class="active"></canvas>
+
+        </div>
+
+    </div>
+
+</body>
+
+<script type="module" src="resources/js/index.js"></script>
+
+<script type="text/javascript" src="resources/js/draw.js"></script>
+
+
+
+</html>
