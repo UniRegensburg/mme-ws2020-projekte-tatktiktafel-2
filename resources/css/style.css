@@ -41,8 +41,7 @@ h1 {
 
 .tacticalboard canvas {
     display: block;
-    width: 30vw;
-    height: 30vw;
+
     border-style: solid;
     border-width: 0.25vw;
     border-color: var(--rose-madder);

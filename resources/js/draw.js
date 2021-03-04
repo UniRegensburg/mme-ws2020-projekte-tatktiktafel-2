@@ -82,8 +82,8 @@ colorElements[color].classList.add('active');
 function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    activeCanvas.width = window.innerWidth;
-    activeCanvas.height = window.innerHeight;
+    activeCanvas.width = window.innerWidth / 2;
+    activeCanvas.height = window.innerHeight / 2;
 }
 
 function onPeerData(id, data) {
