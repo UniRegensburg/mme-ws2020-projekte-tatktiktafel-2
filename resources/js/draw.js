@@ -4,13 +4,6 @@ const ctx = canvas.getContext('2d');
 const activeCtx = activeCanvas.getContext('2d');
 
 
-/*COD BACKGROUND PLACEHOLDER 
-var background = new Image();
-background.src = "resources/img/external-content.duckduckgo.com.jpg";
-background.onload = function () {
-    activeCtx.drawImage(background, 0, 0);
-}*/
-
 var lastPoint;
 var force = 1;
 var mouseDown = false;
@@ -180,10 +173,10 @@ function down(e) {
 function up() {
     if (activeShape) {
         drawRect(activeShape, true);
-        broadcast(JSON.stringify(Object.assign({
+        /*broadcast(JSON.stringify(Object.assign({
             event: 'drawRect',
             commit: true,
-        }, activeShape)));
+        }, activeShape)));*/
         activeShape = undefined;
     }
     lastPoint = undefined;
