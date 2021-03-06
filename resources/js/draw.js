@@ -91,8 +91,11 @@ colorElements[color].classList.add('active');*/
 function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    activeCanvas.width = window.innerWidth / 2;
-    activeCanvas.height = window.innerHeight / 2;
+    //MAGIC NUMBERS... 
+    activeCanvas.width = window.innerHeight / 1.2;
+    activeCanvas.height = window.innerHeight / 1.2;
+    //Redraw background on resize
+    backgroundDraw();
 }
 
 function onPeerData(id, data) {
@@ -130,6 +133,20 @@ function drawRect(data, commit) {
     activeShape = data;
 }
 
+//DRAW BACKGROUND MAP 
+function backgroundDraw() {
+    let img = new Image();
+
+    img.onload = function () {
+        console.log("background loaded");
+        activeCtx.drawImage(img, 0, 0, activeCanvas.width, activeCanvas.height);
+    }
+    img.src = 'https://4.bp.blogspot.com/-LzenCqa3qCs/UUJO_H64QsI/AAAAAAAADSc/N5LZ8RTdq3I/s1600/Strike20mp_strike.png';
+
+}
+backgroundDraw();
+
+
 //TOKEN 
 function tokenDraw(x, y) {
     let img = new Image();
@@ -138,12 +155,12 @@ function tokenDraw(x, y) {
         console.log("token loaded");
         activeCtx.drawImage(img, x, y);
     }
-    img.src = 'https://www.tierheilpraktiker.de/images/mein-tierheilpraktiker/5-2017/201705_Kinder4.jpg';
+    img.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Explosion-155624_icon.svg/120px-Explosion-155624_icon.svg.png';
 
 }
 
 
-// INTERACTION 
+//INTERACTION 
 
 token.addEventListener('click', function () {
     console.log("pencil clicked");
@@ -159,18 +176,21 @@ redButton.addEventListener('click', function () {
     console.log("red clicked");
     activeTool = 'red';
     color = colorMap[0];
+    activeTool = 'pencil';
 });
 
 greenButton.addEventListener('click', function () {
     console.log("green clicked");
     activeTool = 'green';
     color = colorMap[1];
+    activeTool = 'pencil';
 });
 
 blueButton.addEventListener('click', function () {
     console.log("blue clicked");
     activeTool = 'blue';
     color = colorMap[2];
+    activeTool = 'pencil';
 });
 
 
@@ -202,9 +222,9 @@ function move(e) {
                  color: color
              }));*/
 
-        } else if (activeTool === 'rect') {
+        } /*else if (activeTool === 'rect') {
 
-            /*let origin = {
+            let origin = {
                 x: Math.min(originPoint.x, e.offsetX),
                 y: Math.min(originPoint.y, e.offsetY)
             };
@@ -221,9 +241,9 @@ function move(e) {
                 color: color,
                 width: Math.abs(originPoint.x - e.offsetX),
                 height: Math.abs(originPoint.y - e.offsetY)
-            }));*/
+            }));
 
-        }
+        }*/
 
         lastPoint = { x: e.offsetX, y: e.offsetY };
     } else {
