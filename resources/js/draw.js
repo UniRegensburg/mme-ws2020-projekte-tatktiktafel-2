@@ -13,6 +13,9 @@ var token = document.getElementById('token');
 var redButton = document.getElementById('red');
 var greenButton = document.getElementById('green');
 var blueButton = document.getElementById('blue');
+var timelineSaveButton = document.getElementById('saveTimelineFrame');
+
+var stillFrame;
 
 var activeToolElement = document.querySelector('[data-tool].active');
 var activeTool = activeToolElement.dataset.tool;
@@ -159,6 +162,15 @@ function tokenDraw(x, y) {
 
 }
 
+// Convert current canvas to img / stillframe for timeline
+// müsste gehen, schmeißt security error weil die bilder von externem link sind
+function convertCanvasToImage() {
+    //let stillFrame = new Image();
+    //stillFrame = loadImage('./img/gun.jpg');
+    //return stillFrame;
+    console.log("stillframe created")
+}
+
 
 //INTERACTION 
 
@@ -191,6 +203,12 @@ blueButton.addEventListener('click', function () {
     activeTool = 'blue';
     color = colorMap[2];
     activeTool = 'pencil';
+});
+
+timelineSaveButton.addEventListener('click', function () {
+    console.log("save stillframe");
+    convertCanvasToImage();
+
 });
 
 
@@ -275,6 +293,8 @@ function up() {
     originPoint = undefined;
 }
 
+
+
 function key(e) {
     if (e.key === 'Backspace') {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -326,3 +346,6 @@ window.onkeydown = key;
 window.onwebkitmouseforcechanged = forceChanged;
 
 resize();
+
+
+
