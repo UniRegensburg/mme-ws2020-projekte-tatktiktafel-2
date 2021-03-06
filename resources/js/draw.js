@@ -29,6 +29,16 @@ document.querySelectorAll('[data-tool]').forEach(tool => {
     };
 });
 
+
+/* Alex */
+function broadcast(data) {
+    Object.values(peerConnections).forEach(peer => {
+        peer.send(data);
+    });
+}
+
+// Alex ende
+
 /* ALTE COLOR SWATCHES
 const swatch = [
     ["#000000", "#434343", "#666666", "#999999", "#b7b7b7", "#cccccc", "#d9d9d9", "#efefef", "#f3f3f3", "#ffffff"],
@@ -232,14 +242,14 @@ function move(e) {
                 color: color
             });
 
-            /* broadcast(JSON.stringify({
+            broadcast(JSON.stringify({
                  event: 'draw',
                  lastPoint,
                  x: e.offsetX,
                  y: e.offsetY,
                  force: force,
                  color: color
-             }));*/
+             }));
 
         } /*else if (activeTool === 'rect') {
 

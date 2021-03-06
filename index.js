@@ -5,6 +5,8 @@ var uuid = require('uuid');
 const path = require('path');
 
 
+//s
+
 const app = express();
 app.use(express.static(`${__dirname}/resources`));
 app.locals.connections = [];
