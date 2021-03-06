@@ -8,7 +8,11 @@ var lastPoint;
 var force = 1;
 var mouseDown = false;
 var color;
+var pencilButton = document.getElementById('pencil');
 var token = document.getElementById('token');
+var redButton = document.getElementById('red');
+var greenButton = document.getElementById('green');
+var blueButton = document.getElementById('blue');
 
 var activeToolElement = document.querySelector('[data-tool].active');
 var activeTool = activeToolElement.dataset.tool;
@@ -142,8 +146,31 @@ function tokenDraw(x, y) {
 // INTERACTION 
 
 token.addEventListener('click', function () {
+    console.log("pencil clicked");
+    activeTool = 'pencil';
+});
+
+token.addEventListener('click', function () {
     console.log("token clicked");
     activeTool = 'token';
+});
+
+redButton.addEventListener('click', function () {
+    console.log("red clicked");
+    activeTool = 'red';
+    color = colorMap[0];
+});
+
+greenButton.addEventListener('click', function () {
+    console.log("green clicked");
+    activeTool = 'green';
+    color = colorMap[1];
+});
+
+blueButton.addEventListener('click', function () {
+    console.log("blue clicked");
+    activeTool = 'blue';
+    color = colorMap[2];
 });
 
 
@@ -207,23 +234,7 @@ function move(e) {
 function down(e) {
     originPoint = { x: e.offsetX, y: e.offsetY };
 
-    if (activeTool === 'red') {
-        console.log("clickedRed");
-        color = colorMap[0];
-
-
-        //!Broadcast
-    } else if (activeTool === 'green') {
-        console.log("clickedGreen");
-        color = colorMap[1];
-
-        //!Broadcast
-    } else if (activeTool === 'blue') {
-        console.log("clickedBlue");
-        color = colorMap[2];
-
-        //!Broadcast
-    } else if (activeTool === 'token') {
+    if (activeTool === 'token') {
 
         console.log("token placement");
         tokenDraw(e.offsetX, e.offsetY);
