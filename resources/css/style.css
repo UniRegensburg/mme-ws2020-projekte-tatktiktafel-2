@@ -9,6 +9,9 @@ html {
     --marigold: #1f242a;
     --deep-champange: #1f242a;
     --dark-lava: #ffac3e;
+    --red: #ff0000;
+    --green: #00ff00;
+    --blue: #0000ff;
 }
 
 body {
@@ -70,4 +73,14 @@ h1 {
 
 .tacticalboard ul li.disabled {
     background-color: var(--dark-lava);
+}
+
+.tacticalboard i.red {
+    color: var(--red);
+}
+.tacticalboard i.green {
+    color: var(--green);
+}
+.tacticalboard i.blue {
+    color: var(--blue);
 }

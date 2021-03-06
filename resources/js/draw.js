@@ -7,6 +7,7 @@ const activeCtx = activeCanvas.getContext('2d');
 var lastPoint;
 var force = 1;
 var mouseDown = false;
+var color;
 
 var activeToolElement = document.querySelector('[data-tool].active');
 var activeTool = activeToolElement.dataset.tool;
@@ -20,6 +21,7 @@ document.querySelectorAll('[data-tool]').forEach(tool => {
     };
 });
 
+/* ALTE COLOR SWATCHES
 const swatch = [
     ["#000000", "#434343", "#666666", "#999999", "#b7b7b7", "#cccccc", "#d9d9d9", "#efefef", "#f3f3f3", "#ffffff"],
     ["#980000", "#ff0000", "#ff9900", "#ffff00", "#00ff00", "#00ffff", "#4a86e8", "#0000ff", "#9900ff", "#ff00ff"],
@@ -29,11 +31,17 @@ const swatch = [
     ["#a61c00", "#cc0000", "#e69138", "#f1c232", "#6aa84f", "#45818e", "#3c78d8", "#3d85c6", "#674ea7", "#a64d79"],
     ["#85200c", "#990000", "#b45f06", "#bf9000", "#38761d", "#134f5c", "#1155cc", "#0b5394", "#351c75", "#741b47"],
     ["#5b0f00", "#660000", "#783f04", "#7f6000", "#274e13", "#0c343d", "#1c4587", "#073763", "#20124d", "#4c1130"]
+];*/
+
+// R G B 
+const swatch = [
+    ["#ff0000", "#00ff00", "#0000ff"],
 ];
+
 const colorMap = swatch.flat();
 
 var activeShape;
-
+/* COLORSWATCH AUSWAHL 
 let swatchContainer = document.querySelector('#color-picker');
 let colorElements = {};
 swatch.forEach(row => {
@@ -60,8 +68,10 @@ swatch.forEach(row => {
 
     swatchContainer.appendChild(rowElem);
 });
+*/
 
-function randomColor() {
+//RANDOM COLOR ONLOAD 
+/*function randomColor() {
     return parseInt(Math.random() * colorMap.length);
 }
 
@@ -70,7 +80,8 @@ var color = colorMap[colorIndex];
 var colorPicker = document.querySelector('[data-color]');
 colorPicker.dataset.color = color;
 colorPicker.style.color = color;
-colorElements[color].classList.add('active');
+colorElements[color].classList.add('active');*/
+
 
 function resize() {
     canvas.width = window.innerWidth;
@@ -90,6 +101,7 @@ function onPeerData(id, data) {
     }
 }
 
+// DRAWING ELEMENTS
 function draw(data) {
     ctx.beginPath();
     ctx.moveTo(data.lastPoint.x, data.lastPoint.y);
@@ -113,6 +125,20 @@ function drawRect(data, commit) {
     activeShape = data;
 }
 
+//TOKEN 
+function tokenDraw(x, y) {
+    let img = new Image();
+
+    img.onload = function () {
+        console.log("token loaded");
+        activeCtx.drawImage(img, x, y);
+    }
+    img.src = 'https://www.tierheilpraktiker.de/images/mein-tierheilpraktiker/5-2017/201705_Kinder4.jpg';
+
+}
+
+
+// INTERACTION 
 function move(e) {
     mouseDown = e.buttons;
     if (e.buttons) {
@@ -130,18 +156,19 @@ function move(e) {
                 force: force,
                 color: color
             });
-            
-                       /* broadcast(JSON.stringify({
-                            event: 'draw',
-                            lastPoint,
-                            x: e.offsetX,
-                            y: e.offsetY,
-                            force: force,
-                            color: color
-                        }));*/
-                        
+
+            /* broadcast(JSON.stringify({
+                 event: 'draw',
+                 lastPoint,
+                 x: e.offsetX,
+                 y: e.offsetY,
+                 force: force,
+                 color: color
+             }));*/
+
         } else if (activeTool === 'rect') {
-            let origin = {
+            tokenDraw(e.offsetX, e.offsetY);
+            /*let origin = {
                 x: Math.min(originPoint.x, e.offsetX),
                 y: Math.min(originPoint.y, e.offsetY)
             };
@@ -151,6 +178,7 @@ function move(e) {
                 width: Math.abs(originPoint.x - e.offsetX),
                 height: Math.abs(originPoint.y - e.offsetY)
             });
+
             /*broadcast(JSON.stringify({
                 event: 'drawRect',
                 origin: origin,
@@ -158,6 +186,23 @@ function move(e) {
                 width: Math.abs(originPoint.x - e.offsetX),
                 height: Math.abs(originPoint.y - e.offsetY)
             }));*/
+
+        } else if (activeTool === 'red') {
+            console.log("clickedRed");
+            color = colorMap[0];
+
+
+            //!Broadcast
+        } else if (activeTool === 'green') {
+            console.log("clickedGreen");
+            color = colorMap[1];
+
+            //!Broadcast
+        } else if (activeTool === 'blue') {
+            console.log("clickedBlue");
+            color = colorMap[2];
+
+            //!Broadcast
         }
 
         lastPoint = { x: e.offsetX, y: e.offsetY };
@@ -190,33 +235,36 @@ function key(e) {
             event: 'clear'
         }));
     }
+    /*
     if (e.key === 'ArrowRight') {
         colorIndex++;
     }
     if (e.key === 'ArrowLeft') {
         colorIndex--;
-    }
+    }*/
     if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-        if (colorIndex >= colorMap.length) {
-            colorIndex = 0;
-        }
-        if (colorIndex < 0) {
-            colorIndex = colorMap.length - 1;
-        }
-        if (colorElements[color]) {
-            colorElements[color].classList.remove('active');
-        }
-        color = colorMap[colorIndex];
+        /* if (colorIndex >= colorMap.length) {
+             colorIndex = 0;
+         }
+         if (colorIndex < 0) {
+             colorIndex = colorMap.length - 1;
+         }
+         if (colorElements[color]) {
+             colorElements[color].classList.remove('active');
+         }*/
+        color = colorMap[0];
         colorPicker.dataset.color = color;
         colorPicker.style.color = color;
         colorElements[color].classList.toggle('active');
     }
+    //Pressure sens
+    /*
     if (mouseDown && (e.key === 'ArrowUp' || (e.shiftKey && ['ArrowLeft', 'ArrowRight'].includes(e.key)))) {
         force += 0.025;
     }
     if (mouseDown && (e.key === 'ArrowDown' || (e.altKey && ['ArrowLeft', 'ArrowRight'].includes(e.key)))) {
         force -= 0.025;
-    }
+    }*/
 }
 
 function forceChanged(e) {
@@ -228,7 +276,6 @@ window.onmousedown = down;
 window.onmousemove = move;
 window.onmouseup = up;
 window.onkeydown = key;
-
 window.onwebkitmouseforcechanged = forceChanged;
 
 resize();
