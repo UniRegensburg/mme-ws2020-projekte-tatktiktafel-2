@@ -8,6 +8,7 @@ var lastPoint;
 var force = 1;
 var mouseDown = false;
 var color;
+var token = document.getElementById('token');
 
 var activeToolElement = document.querySelector('[data-tool].active');
 var activeTool = activeToolElement.dataset.tool;
@@ -139,6 +140,14 @@ function tokenDraw(x, y) {
 
 
 // INTERACTION 
+
+token.addEventListener('click', function () {
+    console.log("token clicked");
+    activeTool = 'token';
+});
+
+
+
 function move(e) {
     mouseDown = e.buttons;
     if (e.buttons) {
@@ -167,7 +176,7 @@ function move(e) {
              }));*/
 
         } else if (activeTool === 'rect') {
-            tokenDraw(e.offsetX, e.offsetY);
+
             /*let origin = {
                 x: Math.min(originPoint.x, e.offsetX),
                 y: Math.min(originPoint.y, e.offsetY)
@@ -187,22 +196,6 @@ function move(e) {
                 height: Math.abs(originPoint.y - e.offsetY)
             }));*/
 
-        } else if (activeTool === 'red') {
-            console.log("clickedRed");
-            color = colorMap[0];
-
-
-            //!Broadcast
-        } else if (activeTool === 'green') {
-            console.log("clickedGreen");
-            color = colorMap[1];
-
-            //!Broadcast
-        } else if (activeTool === 'blue') {
-            console.log("clickedBlue");
-            color = colorMap[2];
-
-            //!Broadcast
         }
 
         lastPoint = { x: e.offsetX, y: e.offsetY };
@@ -213,6 +206,29 @@ function move(e) {
 
 function down(e) {
     originPoint = { x: e.offsetX, y: e.offsetY };
+
+    if (activeTool === 'red') {
+        console.log("clickedRed");
+        color = colorMap[0];
+
+
+        //!Broadcast
+    } else if (activeTool === 'green') {
+        console.log("clickedGreen");
+        color = colorMap[1];
+
+        //!Broadcast
+    } else if (activeTool === 'blue') {
+        console.log("clickedBlue");
+        color = colorMap[2];
+
+        //!Broadcast
+    } else if (activeTool === 'token') {
+
+        console.log("token placement");
+        tokenDraw(e.offsetX, e.offsetY);
+        activeTool = undefined;
+    }
 }
 
 function up() {
