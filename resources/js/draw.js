@@ -144,6 +144,7 @@ function backgroundDraw() {
         console.log("background loaded");
         activeCtx.drawImage(img, 0, 0, activeCanvas.width, activeCanvas.height);
     }
+    //img.src = 'resources/img/gun.jpg'
     img.src = 'https://4.bp.blogspot.com/-LzenCqa3qCs/UUJO_H64QsI/AAAAAAAADSc/N5LZ8RTdq3I/s1600/Strike20mp_strike.png';
 
 }

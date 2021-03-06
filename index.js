@@ -52,8 +52,8 @@ wss.on('connection', (ws) => {
 
 app.get('/', (req, res) => {
     //res.sendFile(path.join(__dirname, 'index.html'));
-    
-    res.sendFile(path.join(__dirname, 'index.html'));
+    console.log("afterglow")
+    res.sendFile(path.join(__dirname, 'resources/html/index.html'));
 });
 
 server.listen(process.env.PORT || 8081, () => {
