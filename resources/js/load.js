@@ -44,11 +44,27 @@ async function connect() {
     context.eventSource.addEventListener('remove-peer', removePeer, false);
     context.eventSource.addEventListener('session-description', sessionDescription, false);
     context.eventSource.addEventListener('ice-candidate', iceCandidate, false);
-    /*context.eventSource.addEventListener('connected', () => {
+    context.eventSource.addEventListener('open', () => {
+        console.log("open")
+        join();
+    });
+    context.eventSource.addEventListener('connected', () => {
         console.log("connected")
         join();
-    });*/
-    join();
+    });
+    context.eventSource.addEventListener('onopen', () => {
+        console.log("onopen")
+        join();
+    });
+    context.eventSource.addEventListener('error', e => {
+        if (e.readyState === EventSource.CLOSED) {
+         console.log('Connection was closed! ', e);
+        } else {
+         console.log('An unknown error occurred: ', e);
+        }
+       }, false);''
+    //join();
+    //context.eventSource = new EventSource(`/connect?token=${context.token}`);
 }
 
 const rtcConfig = {

@@ -29,7 +29,7 @@ server.listen(process.env.PORT || 8081, () => {
 app.locals.index = 100000000000;
 
 var clients = {};
-var channels = {};
+var channels = {false};
 
 
 app.get('/', (req, res) => {
@@ -50,6 +50,7 @@ app.get('/connect', (req,res) => {
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.flushHeaders();
+    res.write('open');
     //console.log(req)
     // setup a client
 
@@ -89,7 +90,7 @@ app.post('/access', (req, res) => {
     };
 
     const token = jwt.sign(user,process.env.TOKEN_SECRET,{  expiresIn: '3600s' });
-    //console.log(token)
+    console.log(token)
     return res.json(token);
 });
 
@@ -99,16 +100,6 @@ app.get('/:roomId', (req, res) => {
     res.sendFile(path.join(__dirname, 'resources/html/index.html'));
 });
 
-
-
-// store the connections from clients here
-
-function disconnected(client) {
-    let index = app.locals.clients.indexOf(client);
-    if (index > -1) {
-        app.locals.clients.splice(index, 1);
-    }
-}
 
 
 
@@ -123,23 +114,27 @@ app.post('/:roomId/join', auth, (req, res) => {
         channels[roomId] = {};
     }
 
-    
     console.log("channels:" + channels)
-    for (peerId in channels) {
-        console.log("peerID: " + peerID)
+    for (let peerId in channels) {
+        console.log("peerId: " + peerId)
         console.log("ReqUserID: " + req.user.id)
 
-        console.log("links: " + clients[peerId])
-        console.log("rechts: " + clients[req.user.id])
+        //console.log("links: " + clients[peerId])
+        //console.log("rechts: " + clients[req.user.id])
 
-
+        console.log("Clients: ")
         console.log(clients)
+        console.log("Channels: ")
         console.log(channels)
-
-        if (clients[peerID] && clients[req.user.id]) {
+        
+        console.log("links: ")
+        console.log((channels[peerId]))
+        console.log("Rechts: ")
+        console.log(clients[req.user.id])
+        if ((channels.inc) && clients[req.user.id]) {
             console.log("connection")
+            clients[req.user.id].emit('add-peer', { peer: clients[peerId].user, roomId, offer: true });
             clients[peerId].emit('add-peer', { peer: req.user, roomId, offer: false });
-            clients[req.user.id].emit('add-peer', { peer: clients[peerID].user, roomId, offer: true });
         }
     }
 
