@@ -29,7 +29,7 @@ server.listen(process.env.PORT || 8081, () => {
 app.locals.index = 100000000000;
 
 var clients = {};
-var channels = {false};
+var channels = {};
 
 
 app.get('/', (req, res) => {
@@ -49,8 +49,9 @@ app.get('/connect', (req,res) => {
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.flushHeaders();
-    res.write('open');
+    //res.flushHeaders();
+    //res.write('open');
+    res.write("event: " + "open\n\n")
     //console.log(req)
     // setup a client
 
@@ -61,9 +62,13 @@ app.get('/connect', (req,res) => {
         id: decode.id,
         user: decode.username,
         emit: (event, data) => {
-            res.write(`id: ${uuid.v4()}`);
-            res.write(`event: ${event}`);
-            res.write(`data: ${JSON.stringify(data)}`);
+            console.log("im emmit")
+
+            res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\nid: ${uuid.v4()}\n\n`)
+
+            //res.write("id: " + uuid.v4() + "\n\n");
+            //res.write("event: " + event + "\n\n");
+            //res.write("data: " + JSON.stringify(data) + "\n\n");
         }
     };
 
@@ -107,14 +112,15 @@ app.post('/:roomId/join', auth, (req, res) => {
     console.log("app.post('/:roomId/join'")
     let roomId = req.params.roomId;
     console.log(req.params)
-    if (channels[roomId] && channels[roomId][req.user.id]) {
+    /*if (channels[roomId] && channels[roomId][req.user.id]) {
         return res.sendStatus(200);
     }
     if (!channels[roomId]) {
-        channels[roomId] = {};
-    }
-
-    console.log("channels:" + channels)
+        channels[roomId] = false;
+    }*/
+    clients[req.user.id]["roomId"] = roomId
+    console.log("Channels: ")
+    console.log(channels)
     for (let peerId in channels) {
         console.log("peerId: " + peerId)
         console.log("ReqUserID: " + req.user.id)
@@ -131,18 +137,63 @@ app.post('/:roomId/join', auth, (req, res) => {
         console.log((channels[peerId]))
         console.log("Rechts: ")
         console.log(clients[req.user.id])
-        if ((channels.inc) && clients[req.user.id]) {
+        if ((channels[peerId]) && clients[req.user.id]) {
             console.log("connection")
-            clients[req.user.id].emit('add-peer', { peer: clients[peerId].user, roomId, offer: true });
-            clients[peerId].emit('add-peer', { peer: req.user, roomId, offer: false });
+
+            console.log("clients: ")
+            console.log(clients)
+
+            //user der joined
+            console.log("User der Joined")
+            clients[req.user.id].emit('add-peer', { roomId, offer: true, peer: req.user, control: 1 });
+
+            console.log(channels[roomId])
+
+            Object.keys(channels[roomId]).forEach(function(key,index) {
+                
+                clients[key].emit('add-peer', {  roomId, offer: false, peer: req.user, control: 2 });
+                // key: the name of the object key
+                // index: the ordinal position of the key within the object 
+            });
+
+
+            /*for (let user in channels[roomId]) {
+                console.log("user id")
+                console.log(user)
+                console.log("ver. user:")
+                console.log(clients[user.id])
+                clients[user.id].emit('add-peer', { peer: req.user, roomId, offer: false });
+            }*/
+
+
+            //clients[peerId].emit('add-peer', { peer: req.user, roomId, offer: false });
+
+            //clients[req.user.id].emit('add-peer', { peer: clients.user, roomId, offer: true });
+
+            //res.write(`id: ${uuid.v4()}`);
+            //res.write(`event: ${'add-peer'}`);
+            //res.write(`data: ${JSON.stringify({ peer: clients.user, roomId, offer: true })}`);
+
+
+
+
+            //clients[peerId].emit('add-peer', { peer: req.user, roomId, offer: false });
         }
     }
-
-    channels[roomId][req.user.id] = true;
+    let roomUser = {}
+    roomUser[req.user.id] = {}
+    roomUser[req.user.id] = true
+    channels[roomId] = {}
+    channels[roomId] = roomUser
+    //channels[roomId][String(req.user.id)] = req.user.id;
+    //console.log()
     return res.sendStatus(200);
 });
 
 app.post('/relay/:peerId/:event', auth, (req, res) => {
+    console.log('/relay/:peerId/:event')
+    console.log("event: ")
+    console.log(req.params.event)
     let peerId = req.params.peerId;
     if (clients[peerId]) {
         clients[peerId].emit(req.params.event, { peer: req.user, data: req.body });
@@ -156,6 +207,8 @@ function disconnected(client) {
         let channel = channels[roomId];
         if (channel[client.id]) {
             for (let peerId in channel) {
+                console.log("RemoveChannelPeriod:")
+                console.log(channel[peerId])
                 channel[peerId].emit('remove-peer', { peer: client.user, roomId });
             }
             delete channel[client.id];

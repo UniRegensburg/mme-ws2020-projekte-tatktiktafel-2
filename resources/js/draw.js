@@ -30,7 +30,7 @@ document.querySelectorAll('[data-tool]').forEach(tool => {
 });
 
 
-/* Alex */
+/* Alex 
 function broadcast(data) {
     Object.values(peerConnections).forEach(peer => {
         peer.send(data);
@@ -262,9 +262,9 @@ function move(e) {
                 color: color,
                 width: Math.abs(originPoint.x - e.offsetX),
                 height: Math.abs(originPoint.y - e.offsetY)
-            });
+            });*/
 
-            /*broadcast(JSON.stringify({
+            broadcast(JSON.stringify({
                 event: 'drawRect',
                 origin: origin,
                 color: color,
@@ -272,7 +272,7 @@ function move(e) {
                 height: Math.abs(originPoint.y - e.offsetY)
             }));
 
-        }*/
+        
 
         lastPoint = { x: e.offsetX, y: e.offsetY };
     } else {

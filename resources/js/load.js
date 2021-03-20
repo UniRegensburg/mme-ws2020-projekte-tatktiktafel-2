@@ -2,7 +2,9 @@ var context = {
     username: 'user' + parseInt(Math.random() * 100000),
     roomId: window.location.pathname.substr(1),
     token: null,
-    eventSource: null
+    eventSource: null,
+    peers: [],
+    channels: []
 };
 
 async function getToken() {
@@ -40,22 +42,38 @@ async function connect() {
     await getToken();
     context.eventSource = new EventSource(`/connect?token=${context.token}`);
     //context.eventSource = new EventSource(`/connect`);
-    context.eventSource.addEventListener('add-peer', addPeer, false);
-    context.eventSource.addEventListener('remove-peer', removePeer, false);
-    context.eventSource.addEventListener('session-description', sessionDescription, false);
-    context.eventSource.addEventListener('ice-candidate', iceCandidate, false);
+    context.eventSource.addEventListener('add-peer', (e) => {
+        console.log("add-peer")
+        console.log(e)
+        addPeer(e)}, false);
+    context.eventSource.addEventListener('remove-peer', (e) => {
+        console.log("remove-peer")
+        console.log(e)
+        removePeer(e)}, false);
+    context.eventSource.addEventListener('session-description', (e) => {
+        console.log("session-description")
+        console.log(e)
+        sessionDescription(e)}, false);
+    context.eventSource.addEventListener('ice-candidate', (e) => {
+        console.log("ice-candidate")
+        console.log(e)
+        iceCandidate(e)}, false);
     context.eventSource.addEventListener('open', () => {
         console.log("open")
         join();
     });
-    context.eventSource.addEventListener('connected', () => {
+
+    context.eventSource.onmessage = console.log
+
+
+    /*context.eventSource.addEventListener('connected', () => {
         console.log("connected")
         join();
     });
     context.eventSource.addEventListener('onopen', () => {
         console.log("onopen")
         join();
-    });
+    });*/
     context.eventSource.addEventListener('error', e => {
         if (e.readyState === EventSource.CLOSED) {
          console.log('Connection was closed! ', e);
@@ -76,15 +94,25 @@ const rtcConfig = {
     }]
 };
 
+
+
 function addPeer(data) {
     console.log("addPeer")
     let message = JSON.parse(data.data);
-    if (context.peers[message.peer.id]) {
-        return;
-    }
+    console.log("message: ")
+    console.log(message)
+    console.log("own context: ")
+    console.log(context)
+
+
+    //if (context.peers[message.peer.id]) {
+    //    return;
+    //}
+    
 
     // setup peer connection
     let peer = new RTCPeerConnection(rtcConfig);
+    //context.peers = []
     context.peers[message.peer.id] = peer;
 
     // handle ice candidate
@@ -97,14 +125,17 @@ function addPeer(data) {
     // generate offer if required (on join, this peer will create an offer
     // to every other peer in the network, thus forming a mesh)
     if (message.offer) {
+        console.log("offer true")
         // create the data channel, map peer updates
         let channel = peer.createDataChannel('updates');
         channel.onmessage = function (event) {
             onPeerData(message.peer.id, event.data);
         };
+        //context.
         context.channels[message.peer.id] = channel;
         createOffer(message.peer.id, peer);
     } else {
+        console.log("offer false")
         peer.ondatachannel = function (event) {
             context.channels[message.peer.id] = event.channel;
             event.channel.onmessage = function (evt) {
@@ -115,12 +146,14 @@ function addPeer(data) {
 }
 
 function broadcast(data) {
+    console.log("es wird data gesendet")
     for (let peerId in context.channels) {
         context.channels[peerId].send(data);
     }
 }
 
 async function relay(peerId, event, data) {
+    console.log("relay function")
     await fetch(`/relay/${peerId}/${event}`, {
         method: 'POST',
         headers: {
@@ -132,6 +165,7 @@ async function relay(peerId, event, data) {
 }
 
 async function createOffer(peerId, peer) {
+    console.log("create-offer function")
     let offer = await peer.createOffer();
     await peer.setLocalDescription(offer);
     await relay(peerId, 'session-description', offer);
@@ -139,6 +173,7 @@ async function createOffer(peerId, peer) {
 
 
 async function sessionDescription(data) {
+    console.log("sessionDescriptionOffer")
     let message = JSON.parse(data.data);
     let peer = context.peers[message.peer.id];
 
@@ -152,8 +187,13 @@ async function sessionDescription(data) {
 }
 
 function iceCandidate(data) {
+    console.log("iceCandidate-function")
+    //let message = data.peer;
     let message = JSON.parse(data.data);
+    console.log(message)
+    console.log(message.peer.id)
     let peer = context.peers[message.peer.id];
+    console.log(peer)
     peer.addIceCandidate(new RTCIceCandidate(message.data));
 }
 
