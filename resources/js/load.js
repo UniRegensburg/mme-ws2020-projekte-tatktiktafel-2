@@ -4,7 +4,8 @@ var context = {
     token: null,
     eventSource: null,
     peers: [],
-    channels: []
+    channels: [],
+    test: {}
 };
 
 async function getToken() {
@@ -20,10 +21,6 @@ async function getToken() {
     
     
     let data = await res.json();
-    //let data = res.json();
-    //console.log(res.json());
-    //context.token = data.token;
-    //console.log("Hier: " + data)
     context.token = data;
 }
 
@@ -41,7 +38,6 @@ async function join() {
 async function connect() {
     await getToken();
     context.eventSource = new EventSource(`/connect?token=${context.token}`);
-    //context.eventSource = new EventSource(`/connect`);
     context.eventSource.addEventListener('add-peer', (e) => {
         console.log("add-peer")
         console.log(e)
@@ -62,34 +58,21 @@ async function connect() {
         console.log("open")
         join();
     });
-
     context.eventSource.onmessage = console.log
-
-
-    /*context.eventSource.addEventListener('connected', () => {
-        console.log("connected")
-        join();
-    });
-    context.eventSource.addEventListener('onopen', () => {
-        console.log("onopen")
-        join();
-    });*/
     context.eventSource.addEventListener('error', e => {
         if (e.readyState === EventSource.CLOSED) {
          console.log('Connection was closed! ', e);
         } else {
          console.log('An unknown error occurred: ', e);
         }
-       }, false);''
-    //join();
-    //context.eventSource = new EventSource(`/connect?token=${context.token}`);
+       }, false);
 }
 
 const rtcConfig = {
     iceServers: [{
         urls: [
             'stun:stun.l.google.com:19302',
-            'stun:global.stun.twilio.com:3478'
+            'stun:stun1.l.google.com:19302'
         ]
     }]
 };
@@ -103,12 +86,6 @@ function addPeer(data) {
     console.log(message)
     console.log("own context: ")
     console.log(context)
-
-
-    //if (context.peers[message.peer.id]) {
-    //    return;
-    //}
-    
 
     // setup peer connection
     let peer = new RTCPeerConnection(rtcConfig);
@@ -125,17 +102,26 @@ function addPeer(data) {
     // generate offer if required (on join, this peer will create an offer
     // to every other peer in the network, thus forming a mesh)
     if (message.offer) {
+        console.log('Created local peer connection object pc1');
+        //peer.addEventListener('icecandidate', e => onIceCandidate(peer, e));
         console.log("offer true")
+        peer.addEventListener('iceconnectionstatechange', e => onIceStateChange(peer, e));
         // create the data channel, map peer updates
         let channel = peer.createDataChannel('updates');
         channel.onmessage = function (event) {
             onPeerData(message.peer.id, event.data);
         };
         //context.
+        console.log('pc1 createOffer start');
         context.channels[message.peer.id] = channel;
-        createOffer(message.peer.id, peer);
+        createOffer(context.roomId, peer);
+        //createOffer(message.peer.id, peer);
     } else {
         console.log("offer false")
+        console.log('Created remote peer connection object pc2');
+        //peer.addEventListener('icecandidate', e => onIceCandidate(peer, e));
+        peer.addEventListener('iceconnectionstatechange', e => onIceStateChange(peer, e));
+        
         peer.ondatachannel = function (event) {
             context.channels[message.peer.id] = event.channel;
             event.channel.onmessage = function (evt) {
@@ -153,7 +139,12 @@ function broadcast(data) {
 }
 
 async function relay(peerId, event, data) {
+    //data ist hier offer
     console.log("relay function")
+    console.log("data: ")
+    console.log(data)
+    context.test = data;
+    console.log(JSON.stringify(data))
     await fetch(`/relay/${peerId}/${event}`, {
         method: 'POST',
         headers: {
@@ -166,10 +157,52 @@ async function relay(peerId, event, data) {
 
 async function createOffer(peerId, peer) {
     console.log("create-offer function")
+    //let offer = await peer.createOffer();
     let offer = await peer.createOffer();
+    //await onCreateOfferSuccess(offer);
+    //hier simma
     await peer.setLocalDescription(offer);
+    onSetLocalSuccess(peer);
+
     await relay(peerId, 'session-description', offer);
 }
+
+function onSetLocalSuccess(pc) {
+    console.log(`${(pc)} setLocalDescription complete`);
+  }
+
+function onSetSessionDescriptionError(error) {
+console.log(`Failed to set session description: ${error.toString()}`);
+}
+function onAddIceCandidateSuccess(pc) {
+    console.log(`${(pc)} addIceCandidate success`);
+  }
+  
+function onAddIceCandidateError(pc, error) {
+console.log(`${pc} failed to add ICE Candidate: ${error.toString()}`);
+}
+
+async function onCreateOfferSuccess(desc) {
+
+    console.log('pc2 setRemoteDescription start');
+    try {
+      await pc2.setRemoteDescription(desc);
+      onSetRemoteSuccess(pc2);
+    } catch (e) {
+      onSetSessionDescriptionError();
+    }
+  
+    console.log('pc2 createAnswer start');
+    // Since the 'remote' side has no media stream we need
+    // to pass in the right constraints in order for it to
+    // accept the incoming offer of audio and video.
+    try {
+      const answer = await pc2.createAnswer();
+      await onCreateAnswerSuccess(answer);
+    } catch (e) {
+      onCreateSessionDescriptionError(e);
+    }
+  }
 
 
 async function sessionDescription(data) {
@@ -180,10 +213,17 @@ async function sessionDescription(data) {
     let remoteDescription = new RTCSessionDescription(message.data);
     await peer.setRemoteDescription(remoteDescription);
     if (remoteDescription.type === 'offer') {
+        console.log("sD offer Block")
+        console.log("msg.peer.id")
+        console.log(message.peer.id)
         let answer = await peer.createAnswer();
         await peer.setLocalDescription(answer);
         await relay(message.peer.id, 'session-description', answer);
     }
+    else if (remoteDescription.type === 'answer'){
+        console.log("sD answer Block")
+    }
+    
 }
 
 function iceCandidate(data) {
@@ -204,6 +244,23 @@ function removePeer(data) {
     }
 
     delete context.peers[message.peer.id];
+}
+
+async function onIceCandidate(pc, event) {
+    try {
+      await (pc.addIceCandidate(event.candidate));
+      onAddIceCandidateSuccess(pc);
+    } catch (e) {
+      onAddIceCandidateError(pc, e);
+    }
+    console.log(`${(pc)} ICE candidate:\n${event.candidate ? event.candidate.candidate : '(null)'}`);
+  }
+
+function onIceStateChange(pc, event) {
+if (pc) {
+    console.log(`${(pc)} ICE state: ${pc.iceConnectionState}`);
+    console.log('ICE state change event: ', event);
+}
 }
 
 

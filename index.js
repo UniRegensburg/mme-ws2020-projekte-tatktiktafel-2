@@ -1,11 +1,9 @@
 var express = require('express');
 var http = require('http');
-var ws = require('ws');
 var uuid = require('uuid');
 const path = require('path');
 var jwt = require('jsonwebtoken');
-
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
 
 
 var dotenv = require('dotenv');
@@ -49,23 +47,18 @@ app.get('/connect', (req,res) => {
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader("Access-Control-Allow-Origin", "*");
-    //res.flushHeaders();
-    //res.write('open');
     res.write("event: " + "open\n\n")
-    //console.log(req)
+
     // setup a client
 
     var decode = jwt.verify(req.query.token, process.env.TOKEN_SECRET);
-    //console.log(decode)
 
     let client = {
         id: decode.id,
         user: decode.username,
         emit: (event, data) => {
             console.log("im emmit")
-
             res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\nid: ${uuid.v4()}\n\n`)
-
             //res.write("id: " + uuid.v4() + "\n\n");
             //res.write("event: " + event + "\n\n");
             //res.write("data: " + JSON.stringify(data) + "\n\n");
@@ -73,19 +66,14 @@ app.get('/connect', (req,res) => {
     };
 
     clients[client.id] = client;
-
-
     req.on('close', () => {
         disconnected(client);
     });
-
-    //res.write("connected")
    
 });
 
 app.post('/access', (req, res) => {
     console.log("app.post('/access'")
-    //console.log(req.body.username)
     if (!req.body.username) {
         return res.sendStatus(403);
     }
@@ -93,7 +81,6 @@ app.post('/access', (req, res) => {
         id: uuid.v4(),
         username: req.body.username
     };
-
     const token = jwt.sign(user,process.env.TOKEN_SECRET,{  expiresIn: '3600s' });
     console.log(token)
     return res.json(token);
@@ -106,32 +93,13 @@ app.get('/:roomId', (req, res) => {
 });
 
 
-
-
 app.post('/:roomId/join', auth, (req, res) => {
     console.log("app.post('/:roomId/join'")
     let roomId = req.params.roomId;
-    console.log(req.params)
-    /*if (channels[roomId] && channels[roomId][req.user.id]) {
-        return res.sendStatus(200);
-    }
-    if (!channels[roomId]) {
-        channels[roomId] = false;
-    }*/
     clients[req.user.id]["roomId"] = roomId
     console.log("Channels: ")
     console.log(channels)
     for (let peerId in channels) {
-        console.log("peerId: " + peerId)
-        console.log("ReqUserID: " + req.user.id)
-
-        //console.log("links: " + clients[peerId])
-        //console.log("rechts: " + clients[req.user.id])
-
-        console.log("Clients: ")
-        console.log(clients)
-        console.log("Channels: ")
-        console.log(channels)
         
         console.log("links: ")
         console.log((channels[peerId]))
@@ -155,29 +123,6 @@ app.post('/:roomId/join', auth, (req, res) => {
                 // key: the name of the object key
                 // index: the ordinal position of the key within the object 
             });
-
-
-            /*for (let user in channels[roomId]) {
-                console.log("user id")
-                console.log(user)
-                console.log("ver. user:")
-                console.log(clients[user.id])
-                clients[user.id].emit('add-peer', { peer: req.user, roomId, offer: false });
-            }*/
-
-
-            //clients[peerId].emit('add-peer', { peer: req.user, roomId, offer: false });
-
-            //clients[req.user.id].emit('add-peer', { peer: clients.user, roomId, offer: true });
-
-            //res.write(`id: ${uuid.v4()}`);
-            //res.write(`event: ${'add-peer'}`);
-            //res.write(`data: ${JSON.stringify({ peer: clients.user, roomId, offer: true })}`);
-
-
-
-
-            //clients[peerId].emit('add-peer', { peer: req.user, roomId, offer: false });
         }
     }
     let roomUser = {}
@@ -185,8 +130,6 @@ app.post('/:roomId/join', auth, (req, res) => {
     roomUser[req.user.id] = true
     channels[roomId] = {}
     channels[roomId] = roomUser
-    //channels[roomId][String(req.user.id)] = req.user.id;
-    //console.log()
     return res.sendStatus(200);
 });
 
@@ -194,10 +137,32 @@ app.post('/relay/:peerId/:event', auth, (req, res) => {
     console.log('/relay/:peerId/:event')
     console.log("event: ")
     console.log(req.params.event)
+    console.log("req: ")
+    //console.log(req.body)
     let peerId = req.params.peerId;
+    console.log(req.body.type)
+    console.log(clients)
+    console.log("peerID: ")
+    console.log(peerId)
+    Object.keys(clients).forEach(function(key) {
+        if (clients[key].roomId == peerId) {
+            console.log("true")
+            clients[key].emit(req.params.event, { peer: req.user, data: req.body });    
+        }
+    }); 
+    /*
+    clients.forEach(function(item){
+        console.log("im foreach block")
+        if (item.roomId == peerId) {
+            item.emit(req.params.event, { peer: req.user, data: req.body });    
+        }
+    });
+
+    
     if (clients[peerId]) {
+
         clients[peerId].emit(req.params.event, { peer: req.user, data: req.body });
-    }
+    }*/
     return res.sendStatus(200);
 });
 
