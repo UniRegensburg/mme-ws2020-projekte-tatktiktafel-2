@@ -2,99 +2,108 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Taktiktafel 2</title>
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <!-- MIT ARIAL GETAUSCHT-->
-    <link href="https://fonts.googleapis.com/css2?family=Yusei+Magic&display=swap" rel="stylesheet">
-    <!--ICONS NEU-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css">
-    <link rel="stylesheet" type="text/css" href="resources/vendors/fontello/css/fontello.css" />
-    <link rel="stylesheet" type="text/css" href="resources/css/style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Taktiktafel 2</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <!-- MIT ARIAL GETAUSCHT-->
+  <link href="https://fonts.googleapis.com/css2?family=Yusei+Magic&display=swap" rel="stylesheet" />
+  <!--ICONS NEU-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" />
+  <link rel="stylesheet" type="text/css" href="resources/vendors/fontello/css/fontello.css" />
+  <link rel="stylesheet" type="text/css" href="resources/css/style.css" />
 
-    <!-- Alex (die erste ANforderung muss oben stehen)-->
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/simple-peer/9.9.3/simplepeer.min.js"></script>
+  <!-- Alex (die erste ANforderung muss oben stehen)-->
 
-    
-
-    <!-- <script type="text/javascript" src="/js/data.js"></script> -->
-    <!-- Alex -->
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/simple-peer/9.9.3/simplepeer.min.js"></script>
+  <script type="text/javascript" src="resources/js/load.js"></script>
+  
+  <!-- Alex -->
 </head>
 
 <body>
-    <h1>Taktiktafel 2</h1>
-    <div class="tacticalboard">
-        <ul class="menu">
+  <h1>Taktiktafel 2</h1>
+  <div class="mapselector">
+    <button class="buttons" id="arklov_btn">Arklov Peak</button>
+    <button class="buttons" id="azhir_btn">Azhir Cave</button>
+    <button class="buttons" id="euphrates_btn">Euphrates Bridge</button>
+    <button class="buttons" id="grazna_btn">Grazna Raid</button>
+    <button class="buttons" id="gunrunner_btn">Gun Runner</button>
+    <button class="buttons" id="hackney_btn">Hackney Yard</button>
+    <button class="buttons" id="picadilly_btn">Picadilly</button>
+    <button class="buttons" id="rammaza_btn">Rammaza</button>
+    <button class="buttons" id="shoothouse_btn">Shoot House</button>
+    <button class="buttons" id="stpetrograd_btn">St. Petrograd</button>
+  </div>
 
-            <li>
-                <a class="icon-link active center" data-tool="pencil" id="pencil"><i
-                        class="ri-lg ri-pencil-fill"></i></a>
-            </li>
+  <div class="tacticalboard">
+    <ul class="menu">
+      <li>
+        <a class="icon-link active center" data-tool="pencil" id="pencil"><i id="penColRef"
+            class="ri-lg ri-pencil-fill"></i></a>
+      </li>
+      <li id>
+        <a class="icon-link center" data-tool="red" id="red"><i class="ri-lg ri-palette-line red"></i></a>
+      </li>
+      <li>
+        <a class="icon-link center" data-tool="blue" id="blue"><i class="ri-lg ri-palette-line blue"></i></a>
+      </li>
+      <li>
+        <a class="icon-link center" data-tool="grenade" id="grenade"><img src="resources/img/grenade_s.png"></i></a>
+      </li>
+      <li>
+        <a class="icon-link center" data-tool="flash" id="flash"><img src="resources/img/FLASHBANG_s.png"></i></a>
+      </li>
+      <li>
+        <a class="icon-link center" data-tool="smoke" id="smoke"><img src="resources/img/smoke_s.png"></i></a>
+      </li>
+      <li>
+        <a class="icon-link center" data-tool="sniper" id="sniper"><img id="sniperIcon" src="resources/img/sniperMap.png"></i></a>
+      </li>
+      <li>
+        <a class="icon-link center" data-tool="assault" id="assault"><img id="assaultIcon"
+            src="resources/img/assaultMap.png"></i></a>
+      </li>
+      <li>
+        <a class="icon-link center" data-tool="mp" id="mp"><img id="mpIcon" src="resources/img/MPMap.png"></i></a>
+      </li>
 
-            <li>
-                <a class="icon-link center" data-tool="token" id="token"><i class="ri-image-add-line"></i></a>
-            </li>
-            <li>
-                <a class="icon-link center" data-tool="red" id="red"><i class="ri-lg ri-palette-line red"></i></a>
-            </li>
-            <li>
-                <a class="icon-link center" data-tool="green" id="green"><i class="ri-lg ri-palette-line green"></i></a>
-            </li>
-            <li>
-                <a class="icon-link center" data-tool="blue" id="blue"><i class="ri-lg ri-palette-line blue"></i></a>
-            </li>
-            <!-- 
-            <li> SWATCH AUSWAHL
-                   <a class="icon-link center" data-tool="circle"><i class="ri-lg ri-checkbox-blank-circle-line"></i></a>
-            </li>
 
-            <li>
-                <a class="icon-link center" data-tool="text"><i class="ri-lg ri-font-size-2"></i></a>
-            </li>
-            
-            <li>
-                <div class="spacer"></div>
-                <div class="relative">
-                    <a class="icon-link center" data-color="#33ffff">
-                        <i class="ri-lg ri-palette-line"></i>
-                        <i class="ri-lg ri-checkbox-blank-fill center"></i>
-                    </a>
-                    <div id="color-picker" class="dropdown vstack">
-                    </div>
-                </div>
-                <div class="spacer"></div>
-            </li>-->
-
-        </ul>
-        <div class="spacer app">
-            <!--canvas 1-->
-            <canvas class="active"></canvas>
-
-        </div>
-        <ul class="timelineNavigation">
-
-            <li>
-                <a class="icon-link center" data-tool="showTimeline" id="showTimelineButton"><i
-                        class="ri-film-fill"></i></a>
-            </li>
-            <li>
-                <a class="icon-link center" data-tool="saveTimelineFrame" id="saveTimelineFrame"><i
-                        class="ri-download-line"></i></a>
-            </li>
-        </ul>
-
+    </ul>
+    <div class="spacer app">
+      <!--canvas 1-->
+      <canvas class="active"></canvas>
+      <span class="screen">
+        <span class="footer">
+          <span class="left-of-slide">
+            <span class="arrows" id="timeline start">&#10235;</span>
+            <span class="arrows" id="timeline prev">&#10229;</span>
+          </span>
+          <span class="right-of-slide">
+            <span class="arrows" id="timeline next">&#10230;</span>
+            <span class="arrows" id="timeline end">&#10236;</span>
+          </span>
+        </span>
+      </span>
     </div>
-
+    <ul class="timelineNavigation">
+      <li>
+        <a class="icon-link center" data-tool="undo" id="undo"><i class="ri-arrow-go-back-line"></i></a>
+      </li>
+      <li>
+        <a class="icon-link center" data-tool="saveTimelineFrame" id="saveTimelineFrame"><i
+            class="ri-download-line"></i></a>
+      </li>
+      <li>
+        <a class="icon-link center" data-tool="clearCanvas" id="clearCanvas"><i class="ri-delete-bin-5-line"></i></a>
+      </li>
+    </ul>
+  </div>
 </body>
 
 <!--<script type="module" src="resources/js/index.js"></script>-->
 
 <script type="text/javascript" src="resources/js/draw.js"></script>
-
-<script type="text/javascript" src="resources/js/load.js"></script>
 
 
 
