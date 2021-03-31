@@ -4,7 +4,7 @@ Die geplanten Features der Anwendung werden [hier](./docs/Features.md) beschrieb
 
 ## Setup und Testing
 
-Im Starterpaket ist ein einfacher Webserver vorgegeben, mit dem Sie die Inhalte des Ordners `/resources` statisch ausliefern können. Benutzen Sie diesen, um Ihre Anwendung zu entwickeln und zu testen.
+Im Starterpaket ist ein einfacher Webserver vorgegeben, mit dem Sie die Inhalte des Ordners `/resources` statisch ausliefern können. 
 
 So nutzen Sie den vorgegebenen Server:
 
