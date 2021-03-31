@@ -1,352 +1,764 @@
-const canvas = document.querySelector('.app canvas');
-const activeCanvas = document.querySelector('.app canvas.active');
-const ctx = canvas.getContext('2d');
-const activeCtx = activeCanvas.getContext('2d');
-
+const canvas = document.querySelector(".app canvas");
+const activeCanvas = document.querySelector(".app canvas.active");
+const ctx = canvas.getContext("2d");
+const activeCtx = activeCanvas.getContext("2d");
 
 var lastPoint;
 var force = 1;
 var mouseDown = false;
 var color;
-var pencilButton = document.getElementById('pencil');
-var token = document.getElementById('token');
-var redButton = document.getElementById('red');
-var greenButton = document.getElementById('green');
-var blueButton = document.getElementById('blue');
-var timelineSaveButton = document.getElementById('saveTimelineFrame');
+var pencilButton = document.getElementById("pencil");
+var token = document.getElementById("token");
+var grenade = document.getElementById("grenade");
+var flash = document.getElementById("flash");
+var smoke = document.getElementById("smoke");
+var sniper = document.getElementById("sniper");
+var sniperIcon = document.getElementById("sniperIcon");
+var assault = document.getElementById("assault");
+var assaultIcon = document.getElementById("assaultIcon");
+var mp = document.getElementById("mp");
+var mpIcon = document.getElementById("mpIcon");
+var redButton = document.getElementById("red");
+var greenButton = document.getElementById("green");
+var blueButton = document.getElementById("blue");
+var timelineSaveButton = document.getElementById("saveTimelineFrame");
+var clearCanvasButton = document.getElementById("clearCanvas");
+var penColorReference = document.getElementById("penColRef");
+var undoButton = document.getElementById("undo");
+var timelineStartButton = document.getElementById("timeline start");
+var timelinePrevButton = document.getElementById("timeline prev");
+var timelineNextButton = document.getElementById("timeline next");
+var timelineEndButton = document.getElementById("timeline end");
+var activeColor = "red";
+var stack = [];
+var timelineFrames = [];
+var timelineIndex = 0;
+var timelinePosition = 0;
+var currentMap = "/resources/img/Arklov_Peak_objectives.png";
+
+var sniperImg = "resources/img/sniperMap.png";
+var assaultImg = "resources/img/assaultMap.png";
+var mpImg = "resources/img/MPMap.png";
+
+//CONFIG
+const grenadeImg = "resources/img/grenadeExpl.png";
+const flashImg = "resources/img/flashExpl.png";
+const smokeImg = "resources/img/smokeMap.png";
+const imgCenter = 30;
+const toolBlank = "blank";
+
+//MAPS
+let btn1 = document.getElementById("arklov_btn");
+let btn2 = document.getElementById("azhir_btn");
+let btn3 = document.getElementById("euphrates_btn");
+let btn4 = document.getElementById("grazna_btn");
+let btn5 = document.getElementById("gunrunner_btn");
+let btn6 = document.getElementById("hackney_btn");
+let btn7 = document.getElementById("picadilly_btn");
+let btn8 = document.getElementById("rammaza_btn");
+let btn9 = document.getElementById("shoothouse_btn");
+let btn10 = document.getElementById("stpetrograd_btn");
 
 var stillFrame;
 
-var activeToolElement = document.querySelector('[data-tool].active');
+var activeToolElement = document.querySelector("[data-tool].active");
 var activeTool = activeToolElement.dataset.tool;
 
-document.querySelectorAll('[data-tool]').forEach(tool => {
-    tool.onclick = function (e) {
-        activeToolElement.classList.toggle('active');
-        activeToolElement = tool;
-        activeToolElement.classList.toggle('active');
-        activeTool = activeToolElement.dataset.tool;
-    };
+document.querySelectorAll("[data-tool]").forEach((tool) => {
+  tool.onclick = function (e) {
+    activeToolElement.classList.toggle("active");
+    activeToolElement = tool;
+    activeToolElement.classList.toggle("active");
+    activeTool = activeToolElement.dataset.tool;
+  };
 });
-
 
 /* Alex */
 function broadcast(data) {
-    Object.values(peerConnections).forEach(peer => {
-        peer.send(data);
-    });
+  Object.values(peerConnections).forEach((peer) => {
+    peer.send(data);
+  });
 }
 
 // Alex ende
 
-/* ALTE COLOR SWATCHES
-const swatch = [
-    ["#000000", "#434343", "#666666", "#999999", "#b7b7b7", "#cccccc", "#d9d9d9", "#efefef", "#f3f3f3", "#ffffff"],
-    ["#980000", "#ff0000", "#ff9900", "#ffff00", "#00ff00", "#00ffff", "#4a86e8", "#0000ff", "#9900ff", "#ff00ff"],
-    ["#e6b8af", "#f4cccc", "#fce5cd", "#fff2cc", "#d9ead3", "#d0e0e3", "#c9daf8", "#cfe2f3", "#d9d2e9", "#ead1dc"],
-    ["#dd7e6b", "#ea9999", "#f9cb9c", "#ffe599", "#b6d7a8", "#a2c4c9", "#a4c2f4", "#9fc5e8", "#b4a7d6", "#d5a6bd"],
-    ["#cc4125", "#e06666", "#f6b26b", "#ffd966", "#93c47d", "#76a5af", "#6d9eeb", "#6fa8dc", "#8e7cc3", "#c27ba0"],
-    ["#a61c00", "#cc0000", "#e69138", "#f1c232", "#6aa84f", "#45818e", "#3c78d8", "#3d85c6", "#674ea7", "#a64d79"],
-    ["#85200c", "#990000", "#b45f06", "#bf9000", "#38761d", "#134f5c", "#1155cc", "#0b5394", "#351c75", "#741b47"],
-    ["#5b0f00", "#660000", "#783f04", "#7f6000", "#274e13", "#0c343d", "#1c4587", "#073763", "#20124d", "#4c1130"]
-];*/
-
-// R G B 
-const swatch = [
-    ["#ff0000", "#00ff00", "#0000ff"],
-];
+// R G B
+const swatch = [["#ff0000", "#00ff00", "#0000ff"]];
 
 const colorMap = swatch.flat();
 
 var activeShape;
-/* COLORSWATCH AUSWAHL 
-let swatchContainer = document.querySelector('#color-picker');
-let colorElements = {};
-swatch.forEach(row => {
-    let rowElem = document.createElement('div');
-    rowElem.classList.add('hstack');
-    row.forEach(c => {
-        let elem = document.createElement('div');
-        elem.classList.add('box');
-        elem.classList.add('color-' + c.substr(1));
-        elem.style.backgroundColor = c;
-        elem.onclick = function (e) {
-            colorPicker.dataset.color = c;
-            colorPicker.style.color = c;
-            if (colorElements[color]) {
-                colorElements[color].classList.remove('active');
-            }
-            color = c;
-            elem.classList.toggle('active');
-            e.preventDefault();
-        };
-        colorElements[c] = elem;
-        rowElem.appendChild(elem);
-    });
-
-    swatchContainer.appendChild(rowElem);
-});
-*/
-
-//RANDOM COLOR ONLOAD 
-/*function randomColor() {
-    return parseInt(Math.random() * colorMap.length);
-}
-
-var colorIndex = randomColor();
-var color = colorMap[colorIndex];
-var colorPicker = document.querySelector('[data-color]');
-colorPicker.dataset.color = color;
-colorPicker.style.color = color;
-colorElements[color].classList.add('active');*/
-
 
 function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    //MAGIC NUMBERS... 
-    activeCanvas.width = window.innerHeight / 1.2;
-    activeCanvas.height = window.innerHeight / 1.2;
-    //Redraw background on resize
-    backgroundDraw();
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  //MAGIC NUMBERS...
+  activeCanvas.width = window.innerHeight / 1.2;
+  activeCanvas.height = window.innerHeight / 1.2;
+  //Redraw background on resize
+  backgroundDraw();
+  // Setzt die Map auf arklov zurück
 }
 
 function onPeerData(id, data) {
-    let msg = JSON.parse(data);
-    if (msg.event === 'draw') {
-        draw(msg);
-    } else if (msg.event === 'drawRect') {
-        drawRect(msg);
-    } else if (msg.event === 'clear') {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
+  let msg = JSON.parse(data);
+  if (msg.event === "draw") {
+    draw(msg);
+  } else if (msg.event === "drawRect") {
+    drawRect(msg);
+  } else if (msg.event === "clear") {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  } else if (msg.event === "azhir_click") {
+    console.log(JSON.parse(data));
+    backgroundDraw(msg);
+  } else if (msg.event === "grenade") {
+    tokenDraw(msg);
+  } else if (msg.event === "flash") {
+    tokenDraw(msg);
+  } else if (msg.event === "smoke") {
+    tokenDraw(msg);
+  } else if (msg.event === "sniper") {
+    tokenDraw(msg);
+  } else if (msg.event === "assault") {
+    tokenDraw(msg);
+  } else if (msg.event === "mp") {
+    tokenDraw(msg);
+  } else if (msg.event === "Euphrates_click") {
+    backgroundDraw(msg);
+  } else if (msg.event === "Grazna_click") {
+    backgroundDraw(msg);
+  } else if (msg.event === "Gun_Runner_click") {
+    backgroundDraw(msg);
+  } else if (msg.event === "Hackney_click") {
+    backgroundDraw(msg);
+  } else if (msg.event === "Picadilly_click") {
+    backgroundDraw(msg);
+  } else if (msg.event === "Rammaza_click") {
+    backgroundDraw(msg);
+  } else if (msg.event === "Shoot_click") {
+    backgroundDraw(msg);
+  } else if (msg.event === "StPetrograd_click") {
+    backgroundDraw(msg);
+  } else if (msg.event === "arklov_click") {
+    backgroundDraw(msg);
+  }
+}
+
+//Stack functionality
+function stackManager() {
+  let still = convertCanvasToImage();
+  if (stack.length < 10) {
+    stack.push(still);
+  } else {
+    stack.splice(0, 1);
+    console.log(stack);
+    stack.push(still);
+  }
+}
+
+function drawStack() {
+  let img = new Image();
+
+  img.onload = function () {
+    console.log("stack loaded");
+    activeCtx.drawImage(img, 0, 0, activeCanvas.width, activeCanvas.height);
+  };
+  img.src = stack[0];
 }
 
 // DRAWING ELEMENTS
 function draw(data) {
-    ctx.beginPath();
-    ctx.moveTo(data.lastPoint.x, data.lastPoint.y);
-    ctx.lineTo(data.x, data.y);
-    ctx.strokeStyle = data.color;
-    ctx.lineWidth = Math.pow(data.force || 1, 4) * 2;
-    ctx.lineCap = 'round';
-    ctx.stroke();
-    ctx.closePath();
+  if (data.lastPoint.x < 0 || data.lastPoint.x > 800) {
+    console.log("outside border");
+    activeTool = undefined;
+  }
+  ctx.beginPath();
+  ctx.moveTo(data.lastPoint.x, data.lastPoint.y);
+  ctx.lineTo(data.x, data.y);
+  ctx.strokeStyle = data.color;
+  ctx.lineWidth = Math.pow(data.force || 1, 4) * 2;
+  ctx.lineCap = "round";
+  ctx.stroke();
+  ctx.closePath();
 }
 
-function drawRect(data, commit) {
-    activeCtx.clearRect(0, 0, activeCanvas.width, activeCanvas.height);
-    if (data.commit || commit) {
-        ctx.strokeStyle = data.color;
-        ctx.strokeRect(data.origin.x, data.origin.y, data.width, data.height);
-    } else {
-        activeCtx.strokeStyle = data.color;
-        activeCtx.strokeRect(data.origin.x, data.origin.y, data.width, data.height);
-    }
-    activeShape = data;
-}
-
-//DRAW BACKGROUND MAP 
-function backgroundDraw() {
-    let img = new Image();
-
+//DRAW BACKGROUND MAP
+function backgroundDraw(data) {
+  let img = new Image();
+  if (data != undefined) {
+    console.log("defined_data");
     img.onload = function () {
-        console.log("background loaded");
-        activeCtx.drawImage(img, 0, 0, activeCanvas.width, activeCanvas.height);
-    }
-    //img.src = 'resources/img/gun.jpg'
-    img.src = 'https://4.bp.blogspot.com/-LzenCqa3qCs/UUJO_H64QsI/AAAAAAAADSc/N5LZ8RTdq3I/s1600/Strike20mp_strike.png';
-
-}
-backgroundDraw();
-
-
-//TOKEN 
-function tokenDraw(x, y) {
-    let img = new Image();
-
+      console.log("background loaded");
+      activeCtx.drawImage(img, 0, 0, activeCanvas.width, activeCanvas.height);
+    };
+    img.src = data.src;
+  } else {
+    console.log("undefined_data");
     img.onload = function () {
-        console.log("token loaded");
-        activeCtx.drawImage(img, x, y);
-    }
-    img.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Explosion-155624_icon.svg/120px-Explosion-155624_icon.svg.png';
+      console.log("background loaded");
+      activeCtx.drawImage(img, 0, 0, activeCanvas.width, activeCanvas.height);
+    };
+    img.src = "/resources/img/Arklov_Peak_objectives.png";
+  }
 
+  //img.src = 'https://4.bp.blogspot.com/-LzenCqa3qCs/UUJO_H64QsI/AAAAAAAADSc/N5LZ8RTdq3I/s1600/Strike20mp_strike.png';
+
+  //CHANGE MAP
+}
+
+//TOKEN
+function tokenDraw(data) {
+  console.log("tokenDraw " + data.x + " " + data.y + " " + data.img);
+  let img = new Image();
+
+  img.onload = function () {
+    console.log("token loaded");
+
+    activeCtx.drawImage(img, data.x - imgCenter, data.y - imgCenter);
+  };
+  img.src = data.img;
+  console.log("token ende");
+}
+
+function changeIconColor() {
+  if (activeColor === "red") {
+    //change tokenColor
+    sniperImg = "resources/img/sniperMap.png";
+    assaultImg = "resources/img/assaultMap.png";
+    mpImg = "resources/img/MPMap.png";
+    penColorReference.style.color = "red";
+    //change Icon
+    sniperIcon.src = "resources/img/sniperMap.png";
+    assaultIcon.src = "resources/img/assaultMap.png";
+    mpIcon.src = "resources/img/MPMap.png";
+  } else if (activeColor === "blue") {
+    //change tokenColor
+    sniperImg = "resources/img/sniperMapblue.png";
+    assaultImg = "resources/img/assaultMapblue.png";
+    mpImg = "resources/img/MPMapblue.png";
+    penColorReference.style.color = "blue";
+    // change Icon
+    sniperIcon.src = "resources/img/sniperMapblue.png";
+    assaultIcon.src = "resources/img/assaultMapblue.png";
+    mpIcon.src = "resources/img/MPMapblue.png";
+    console.log("doing");
+  }
 }
 
 // Convert current canvas to img / stillframe for timeline
-// müsste gehen, schmeißt security error weil die bilder von externem link sind
 function convertCanvasToImage() {
-    //let stillFrame = new Image();
-    //stillFrame = loadImage('./img/gun.jpg');
-    //return stillFrame;
-    console.log("stillframe created")
+  let stillFrame = new Image();
+  stillFrame.src = canvas.toDataURL();
+  console.log("stillframe created");
+  timelineFrames[timelineIndex] = stillFrame;
+  timelinePosition = timelineIndex;
+  timelineIndex = timelineIndex + 1;
+  console.log(timelineFrames);
+  return stillFrame;
 }
 
+// Timeline Navigation
+function tlStart() {
+  if (timelineFrames.length >= 0) {
+    activeCtx.drawImage(
+      timelineFrames[0],
+      0,
+      0,
+      activeCanvas.width,
+      activeCanvas.height
+    );
+  }
+  timelinePosition = 0;
+}
 
-//INTERACTION 
+function tlPrev() {
+  if (timelinePosition > 0) {
+    activeCtx.drawImage(
+      timelineFrames[timelinePosition - 1],
+      0,
+      0,
+      activeCanvas.width,
+      activeCanvas.height
+    );
+    timelinePosition = timelinePosition - 1;
+  }
+}
 
-token.addEventListener('click', function () {
-    console.log("pencil clicked");
-    activeTool = 'pencil';
+function tlNext() {
+  if (timelinePosition < timelineFrames.length - 1) {
+    activeCtx.drawImage(
+      timelineFrames[timelinePosition + 1],
+      0,
+      0,
+      activeCanvas.width,
+      activeCanvas.height
+    );
+    timelinePosition = timelinePosition + 1;
+  }
+}
+
+function tlEnd() {
+  if (timelineFrames.length > 1) {
+    activeCtx.drawImage(
+      timelineFrames[timelineFrames.length - 1],
+      0,
+      0,
+      activeCanvas.width,
+      activeCanvas.height
+    );
+    timelinePosition = timelineFrames.length - 1;
+  } else {
+    tlStart();
+  }
+}
+
+function clearTimeline() {
+  timelineFrames = [];
+  timelineIndex = 0;
+  timelinePosition = 0;
+}
+
+//INTERACTION
+btn1.addEventListener("click", () => {
+  activeTool = "arklov";
+});
+btn2.addEventListener("click", () => {
+  activeTool = "azhir";
+  //img.src = "/resources/img/Azhir_Cave_objectives.png";
+  //currentMap = img.src;
+});
+btn3.addEventListener("click", () => {
+  activeTool = "Euphrates";
+  //img.src = "/resources/img/Euphrates_Bridge_objectives.png";
+  //currentMap = img.src;
+});
+btn4.addEventListener("click", () => {
+  activeTool = "Grazna";
+  //img.src = "/resources/img/Grazna_Raid_objectives.png";
+  //currentMap = img.src;
+});
+btn5.addEventListener("click", () => {
+  activeTool = "Gun_Runner";
+  //img.src = "/resources/img/Gun_Runner_objectives.png";
+  //currentMap = img.src;
+});
+btn6.addEventListener("click", () => {
+  activeTool = "Hackney";
+  // img.src = "/resources/img/Hackney_Yard_objectives.png";
+  //currentMap = img.src;
+});
+btn7.addEventListener("click", () => {
+  activeTool = "Picadilly";
+  //img.src = "/resources/img/Picadilly_objectives.png";
+  //currentMap = img.src;
+});
+btn8.addEventListener("click", () => {
+  activeTool = "Rammaza";
+  //img.src = "/resources/img/Rammaza_objectives.png";
+  // currentMap = img.src;
+});
+btn9.addEventListener("click", () => {
+  activeTool = "Shoot";
+  //img.src = "/resources/img/Shoot_House_objectives.png";
+  // currentMap = img.src;
+});
+btn10.addEventListener("click", () => {
+  activeTool = "StPetrograd";
+  //img.src = "/resources/img/StPetrograd_objectives.png";
+  //currentMap = img.src;
 });
 
-token.addEventListener('click', function () {
-    console.log("token clicked");
-    activeTool = 'token';
+grenade.addEventListener("click", function () {
+  console.log("grenade clicked");
+  activeTool = "grenade";
 });
 
-redButton.addEventListener('click', function () {
-    console.log("red clicked");
-    activeTool = 'red';
-    color = colorMap[0];
-    activeTool = 'pencil';
+flash.addEventListener("click", function () {
+  console.log("flash clicked");
+  activeTool = "flash";
 });
 
-greenButton.addEventListener('click', function () {
-    console.log("green clicked");
-    activeTool = 'green';
-    color = colorMap[1];
-    activeTool = 'pencil';
+smoke.addEventListener("click", function () {
+  console.log("smoke clicked");
+  activeTool = "smoke";
 });
 
-blueButton.addEventListener('click', function () {
-    console.log("blue clicked");
-    activeTool = 'blue';
-    color = colorMap[2];
-    activeTool = 'pencil';
+sniper.addEventListener("click", function () {
+  console.log("sniper clicked");
+  activeTool = "sniper";
 });
 
-timelineSaveButton.addEventListener('click', function () {
-    console.log("save stillframe");
-    convertCanvasToImage();
-
+assault.addEventListener("click", function () {
+  console.log("assault clicked");
+  activeTool = "assault";
 });
 
+mp.addEventListener("click", function () {
+  console.log("mp clicked");
+  activeTool = "mp";
+});
 
+redButton.addEventListener("click", function () {
+  console.log("red clicked");
+  activeTool = "red";
+  activeColor = "red";
+  changeIconColor();
+  color = colorMap[0];
+  activeTool = "pencil";
+});
+
+blueButton.addEventListener("click", function () {
+  console.log("blue clicked");
+  activeTool = "blue";
+  activeColor = "blue";
+  changeIconColor();
+  color = colorMap[2];
+  activeTool = "pencil";
+});
+
+timelineSaveButton.addEventListener("click", function () {
+  console.log("save stillframe");
+  let still = convertCanvasToImage();
+  document.body.appendChild(still);
+});
+
+undo.addEventListener("click", function () {
+  console.log("step back");
+});
+
+clearCanvasButton.addEventListener("click", function () {
+  console.log("clear canvas");
+  activeCtx.clearRect(0, 0, canvas.width, canvas.height);
+  backgroundDraw();
+  clearTimeline();
+});
+
+timelineStartButton.addEventListener("click", function () {
+  tlStart();
+  console.log("timline Start");
+});
+timelinePrevButton.addEventListener("click", function () {
+  tlPrev();
+  console.log("timline Prev");
+});
+timelineNextButton.addEventListener("click", function () {
+  tlNext();
+  console.log("timline Next");
+});
+timelineEndButton.addEventListener("click", function () {
+  tlEnd();
+  console.log("timline End");
+});
 
 function move(e) {
-    mouseDown = e.buttons;
-    if (e.buttons) {
-        if (!lastPoint) {
-            lastPoint = { x: e.offsetX, y: e.offsetY };
-            originPoint = { x: e.offsetX, y: e.offsetY };
-            return;
-        }
-
-        if (activeTool === 'pencil') {
-            draw({
-                lastPoint,
-                x: e.offsetX,
-                y: e.offsetY,
-                force: force,
-                color: color
-            });
-
-            broadcast(JSON.stringify({
-                 event: 'draw',
-                 lastPoint,
-                 x: e.offsetX,
-                 y: e.offsetY,
-                 force: force,
-                 color: color
-             }));
-
-        } /*else if (activeTool === 'rect') {
-
-            let origin = {
-                x: Math.min(originPoint.x, e.offsetX),
-                y: Math.min(originPoint.y, e.offsetY)
-            };
-            drawRect({
-                origin: origin,
-                color: color,
-                width: Math.abs(originPoint.x - e.offsetX),
-                height: Math.abs(originPoint.y - e.offsetY)
-            });
-
-            /*broadcast(JSON.stringify({
-                event: 'drawRect',
-                origin: origin,
-                color: color,
-                width: Math.abs(originPoint.x - e.offsetX),
-                height: Math.abs(originPoint.y - e.offsetY)
-            }));
-
-        }*/
-
-        lastPoint = { x: e.offsetX, y: e.offsetY };
-    } else {
-        lastPoint = undefined;
+  mouseDown = e.buttons;
+  if (e.buttons) {
+    if (!lastPoint) {
+      lastPoint = { x: e.offsetX, y: e.offsetY };
+      originPoint = { x: e.offsetX, y: e.offsetY };
+      return;
     }
+
+    if (activeTool === "pencil") {
+      draw({
+        lastPoint,
+        x: e.offsetX,
+        y: e.offsetY,
+        force: force,
+        color: color,
+      });
+
+      broadcast(
+        JSON.stringify({
+          event: "draw",
+          lastPoint,
+          x: e.offsetX,
+          y: e.offsetY,
+          force: force,
+          color: color,
+        })
+      );
+    }
+
+    lastPoint = { x: e.offsetX, y: e.offsetY };
+  } else {
+    lastPoint = undefined;
+  }
 }
 
 function down(e) {
-    originPoint = { x: e.offsetX, y: e.offsetY };
+  originPoint = { x: e.offsetX, y: e.offsetY };
 
-    if (activeTool === 'token') {
-
-        console.log("token placement");
-        tokenDraw(e.offsetX, e.offsetY);
-        activeTool = undefined;
-    }
+  if (activeTool === "grenade") {
+    console.log("grenade placement");
+    tokenDraw({
+      x: e.offsetX,
+      y: e.offsetY,
+      img: "resources/img/grenadeExpl.png",
+    });
+    activeTool = undefined;
+    broadcast(
+      JSON.stringify({
+        event: "grenade",
+        x: e.offsetX,
+        y: e.offsetY,
+        img: "resources/img/grenadeExpl.png",
+      })
+    );
+  } else if (activeTool === "flash") {
+    console.log("flash placement");
+    tokenDraw({
+      x: e.offsetX,
+      y: e.offsetY,
+      img: "resources/img/flashExpl.png",
+    });
+    activeTool = undefined;
+    broadcast(
+      JSON.stringify({
+        event: "flash",
+        x: e.offsetX,
+        y: e.offsetY,
+        img: "resources/img/flashExpl.png",
+      })
+    );
+  } else if (activeTool === "smoke") {
+    console.log("smoke placement");
+    tokenDraw({
+      x: e.offsetX,
+      y: e.offsetY,
+      img: "resources/img/smokeMap.png",
+    });
+    activeTool = undefined;
+    broadcast(
+      JSON.stringify({
+        event: "smoke",
+        x: e.offsetX,
+        y: e.offsetY,
+        img: "resources/img/smokeMap.png",
+      })
+    );
+  } else if (activeTool === "sniper") {
+    console.log("sniper placement");
+    tokenDraw({
+      x: e.offsetX,
+      y: e.offsetY,
+      img: sniperImg,
+    });
+    activeTool = undefined;
+    if (activeColor === "red") { }
+    broadcast(
+      JSON.stringify({
+        event: "sniper",
+        x: e.offsetX,
+        y: e.offsetY,
+        img: sniperImg,
+      })
+    );
+  } else if (activeTool === "assault") {
+    console.log("assault placement");
+    tokenDraw({
+      x: e.offsetX,
+      y: e.offsetY,
+      img: assaultImg,
+    });
+    activeTool = undefined;
+    broadcast(
+      JSON.stringify({
+        event: "assault",
+        x: e.offsetX,
+        y: e.offsetY,
+        img: assaultImg,
+      })
+    );
+  } else if (activeTool === "mp") {
+    console.log("mp placement");
+    tokenDraw({
+      x: e.offsetX,
+      y: e.offsetY,
+      img: mpImg = "resources/img/MPMap.png",
+    });
+    activeTool = undefined;
+    broadcast(
+      JSON.stringify({
+        event: "smoke",
+        x: e.offsetX,
+        y: e.offsetY,
+        img: mpImg = "resources/img/MPMap.png",
+      })
+    );
+  }
 }
 
 function up() {
-    if (activeShape) {
-        drawRect(activeShape, true);
-        /*broadcast(JSON.stringify(Object.assign({
-            event: 'drawRect',
+  if (activeShape) {
+    drawRect(activeShape, true);
+    broadcast(
+      JSON.stringify(
+        Object.assign(
+          {
+            event: "drawRect",
             commit: true,
-        }, activeShape)));*/
-        activeShape = undefined;
-    }
-    lastPoint = undefined;
-    originPoint = undefined;
+          },
+          activeShape
+        )
+      )
+    );
+    activeShape = undefined;
+  } else if (activeTool === "azhir") {
+    console.log("azhir clicked");
+    backgroundDraw({
+      event: "azhir_click",
+      src: "/resources/img/Azhir_Cave_objectives.png",
+    });
+    activeTool = undefined;
+    broadcast(
+      JSON.stringify({
+        event: "azhir_click",
+        src: "/resources/img/Azhir_Cave_objectives.png",
+      })
+    );
+  } else if (activeTool === "arklov") {
+    console.log("arklov clicked");
+    backgroundDraw({
+      event: "arklov_click",
+      src: "/resources/img/Arklov_Peak_objectives.png",
+    });
+    activeTool = undefined;
+    broadcast(
+      JSON.stringify({
+        event: "arklov_click",
+        src: "/resources/img/Arklov_Peak_objectives.png",
+      })
+    );
+  } else if (activeTool === "Euphrates") {
+    console.log("Euphrates clicked");
+    backgroundDraw({
+      event: "Euphrates_click",
+      src: "/resources/img/Euphrates_Bridge_objectives.png",
+    });
+    activeTool = undefined;
+    broadcast(
+      JSON.stringify({
+        event: "Euphrates_click",
+        src: "/resources/img/Euphrates_Bridge_objectives.png",
+      })
+    );
+  } else if (activeTool === "Grazna") {
+    console.log("Grazna clicked");
+    backgroundDraw({
+      event: "Grazna_click",
+      src: "/resources/img/Grazna_Raid_objectives.png",
+    });
+    activeTool = undefined;
+    broadcast(
+      JSON.stringify({
+        event: "Grazna_click",
+        src: "/resources/img/Grazna_Raid_objectives.png",
+      })
+    );
+  } else if (activeTool === "Gun_Runner") {
+    console.log("Gun_Runner clicked");
+    backgroundDraw({
+      event: "Gun_Runner_click",
+      src: "/resources/img/Gun_Runner_objectives.png",
+    });
+    activeTool = undefined;
+    broadcast(
+      JSON.stringify({
+        event: "Gun_Runner_click",
+        src: "/resources/img/Gun_Runner_objectives.png",
+      })
+    );
+  } else if (activeTool === "Hackney") {
+    console.log("Hackney clicked");
+    backgroundDraw({
+      event: "Hackney_click",
+      src: "/resources/img/Hackney_Yard_objectives.png",
+    });
+    activeTool = undefined;
+    broadcast(
+      JSON.stringify({
+        event: "Hackney_click",
+        src: "/resources/img/Hackney_Yard_objectives.png",
+      })
+    );
+  } else if (activeTool === "Picadilly") {
+    console.log("Picadilly clicked");
+    backgroundDraw({
+      event: "Picadilly_click",
+      src: "/resources/img/Picadilly_objectives.png",
+    });
+    activeTool = undefined;
+    broadcast(
+      JSON.stringify({
+        event: "Picadilly_click",
+        src: "/resources/img/Picadilly_objectives.png",
+      })
+    );
+  } else if (activeTool === "Rammaza") {
+    console.log("Rammaza clicked");
+    backgroundDraw({
+      event: "Rammaza_click",
+      src: "/resources/img/Rammaza_objectives.png",
+    });
+    activeTool = undefined;
+    broadcast(
+      JSON.stringify({
+        event: "Rammaza_click",
+        src: "/resources/img/Rammaza_objectives.png",
+      })
+    );
+  } else if (activeTool === "Shoot") {
+    console.log("Shoot clicked");
+    backgroundDraw({
+      event: "Shoot_click",
+      src: "/resources/img/Shoot_House_objectives.png",
+    });
+    activeTool = undefined;
+    broadcast(
+      JSON.stringify({
+        event: "Shoot_click",
+        src: "/resources/img/Shoot_House_objectives.png",
+      })
+    );
+  } else if (activeTool === "StPetrograd") {
+    console.log("StPetrograd clicked");
+    backgroundDraw({
+      event: "StPetrograd_click",
+      src: "/resources/img/StPetrograd_objectives.png",
+    });
+    activeTool = undefined;
+    broadcast(
+      JSON.stringify({
+        event: "StPetrograd_click",
+        src: "/resources/img/StPetrograd_objectives.png",
+      })
+    );
+  }
+  lastPoint = undefined;
+  originPoint = undefined;
 }
 
-
-
 function key(e) {
-    if (e.key === 'Backspace') {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        broadcast(JSON.stringify({
-            event: 'clear'
-        }));
-    }
-    /*
-    if (e.key === 'ArrowRight') {
-        colorIndex++;
-    }
-    if (e.key === 'ArrowLeft') {
-        colorIndex--;
-    }*/
-    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-        /* if (colorIndex >= colorMap.length) {
-             colorIndex = 0;
-         }
-         if (colorIndex < 0) {
-             colorIndex = colorMap.length - 1;
-         }
-         if (colorElements[color]) {
-             colorElements[color].classList.remove('active');
-         }*/
-        color = colorMap[0];
-        colorPicker.dataset.color = color;
-        colorPicker.style.color = color;
-        colorElements[color].classList.toggle('active');
-    }
-    //Pressure sens
-    /*
-    if (mouseDown && (e.key === 'ArrowUp' || (e.shiftKey && ['ArrowLeft', 'ArrowRight'].includes(e.key)))) {
-        force += 0.025;
-    }
-    if (mouseDown && (e.key === 'ArrowDown' || (e.altKey && ['ArrowLeft', 'ArrowRight'].includes(e.key)))) {
-        force -= 0.025;
-    }*/
+  if (e.key === "Backspace") {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    broadcast(
+      JSON.stringify({
+        event: "clear",
+      })
+    );
+  }
+
+  if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+    color = colorMap[0];
+    colorPicker.dataset.color = color;
+    colorPicker.style.color = color;
+    colorElements[color].classList.toggle("active");
+  }
 }
 
 function forceChanged(e) {
-    force = e.webkitForce || 1;
+  force = e.webkitForce || 1;
 }
 
 window.onresize = resize;
@@ -357,6 +769,3 @@ window.onkeydown = key;
 window.onwebkitmouseforcechanged = forceChanged;
 
 resize();
-
-
-

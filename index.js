@@ -3,16 +3,28 @@ var http = require('http');
 var ws = require('ws');
 var uuid = require('uuid');
 const path = require('path');
+var jwt = require('jsonwebtoken');
+var bodyParser = require('body-parser');
+var dotenv = require('dotenv');
 
-
-//s
+const { env } = require('process');
+// https://www.twilio.com/blog/working-with-environment-variables-in-node-js-html
+dotenv.config();
 
 const app = express();
-app.use(express.static(`${__dirname}/resources`));
+app.use('/resources', express.static(`${__dirname}/resources`));
+app.use('/favicon.ico', express.static('${__dirname}/resources/img/gun_PEa_icon.ico'));
 app.locals.connections = [];
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
 const server = http.createServer(app);
 const wss = new ws.Server({ server });
+
+app.locals.index = 100000000000;
+
+var clients = {};
+var channels = {};
 
 function broadcastConnections() {
     let ids = app.locals.connections.map(c => c._connId);
@@ -52,11 +64,25 @@ wss.on('connection', (ws) => {
 });
 
 
-app.get('/', (req, res) => {
+/*app.get('/', (req, res) => {
     //res.sendFile(path.join(__dirname, 'index.html'));
     console.log("afterglow")
     res.sendFile(path.join(__dirname, 'resources/html/index.html'));
+});*/
+
+
+app.get('/', (req, res) => {
+    console.log("app.get('/'")
+    app.locals.index++;
+    let id = app.locals.index.toString(36);
+    res.redirect(`/${id}`);
 });
+
+app.get('/:roomId', (req, res) => {
+    console.log("app.get('/:roomId'")
+    res.sendFile(path.join(__dirname, 'resources/html/index.html'));
+});
+
 
 server.listen(process.env.PORT || 8081, () => {
     console.log(`Started server on port ${server.address().port}`);
