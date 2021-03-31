@@ -1,12 +1,12 @@
-const canvas = document.querySelector(".app canvas");
-const activeCanvas = document.querySelector(".app canvas.active");
-const ctx = canvas.getContext("2d");
-const activeCtx = activeCanvas.getContext("2d");
 
 var lastPoint;
 var force = 1;
 var mouseDown = false;
 var color;
+var stack = [];
+var timelineFrames = [];
+var timelineIndex = 0;
+var timelinePosition = 0;
 var pencilButton = document.getElementById("pencil");
 var token = document.getElementById("token");
 var grenade = document.getElementById("grenade");
@@ -31,10 +31,10 @@ var timelinePrevButton = document.getElementById("timeline prev");
 var timelineNextButton = document.getElementById("timeline next");
 var timelineEndButton = document.getElementById("timeline end");
 var activeColor = "red";
-var stack = [];
-var timelineFrames = [];
-var timelineIndex = 0;
-var timelinePosition = 0;
+var stillFrame;
+var activeToolElement = document.querySelector("[data-tool].active");
+var activeTool = activeToolElement.dataset.tool;
+
 
 var sniperImg = "resources/img/sniperMap.png";
 var assaultImg = "resources/img/assaultMap.png";
@@ -46,6 +46,10 @@ const flashImg = "resources/img/flashExpl.png";
 const smokeImg = "resources/img/smokeMap.png";
 const imgCenter = 30;
 const toolBlank = "blank";
+const canvas = document.querySelector(".app canvas");
+const activeCanvas = document.querySelector(".app canvas.active");
+const ctx = canvas.getContext("2d");
+const activeCtx = activeCanvas.getContext("2d");
 
 //MAPS
 let btn1 = document.getElementById("arklov_btn");
@@ -59,11 +63,6 @@ let btn8 = document.getElementById("rammaza_btn");
 let btn9 = document.getElementById("shoothouse_btn");
 let btn10 = document.getElementById("stpetrograd_btn");
 
-var stillFrame;
-
-var activeToolElement = document.querySelector("[data-tool].active");
-var activeTool = activeToolElement.dataset.tool;
-
 document.querySelectorAll("[data-tool]").forEach((tool) => {
   tool.onclick = function (e) {
     activeToolElement.classList.toggle("active");
@@ -73,26 +72,21 @@ document.querySelectorAll("[data-tool]").forEach((tool) => {
   };
 });
 
-/* Alex */
 function broadcast(data) {
   Object.values(peerConnections).forEach((peer) => {
     peer.send(data);
   });
 }
 
-// Alex ende
 
 // R G B
 const swatch = [["#ff0000", "#00ff00", "#0000ff"]];
-
 const colorMap = swatch.flat();
-
 var activeShape;
 
 function resize() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-  //MAGIC NUMBERS...
   activeCanvas.width = window.innerHeight / 1.2;
   activeCanvas.height = window.innerHeight / 1.2;
   //Redraw background on resize
@@ -109,7 +103,6 @@ function onPeerData(id, data) {
   } else if (msg.event === "clear") {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   } else if (msg.event === "azhir_click") {
-    console.log(JSON.parse(data));
     backgroundDraw(msg);
   } else if (msg.event === "grenade") {
     tokenDraw(msg);
@@ -141,10 +134,22 @@ function onPeerData(id, data) {
     backgroundDraw(msg);
   } else if (msg.event === "arklov_click") {
     backgroundDraw(msg);
+  } else if (msg.event === "Backwards_click") {
+    backgroundDraw(msg);
+  } else if (msg.event === "Forward_click") {
+    backgroundDraw(msg);
+  } else if (msg.event === "tlNext_click") {
+    backgroundDraw(msg);
+  } else if (msg.event === "tlStart_click") {
+    backgroundDraw(msg);
+  } else if (msg.event === "tlPrev_click") {
+    backgroundDraw(msg);
+  } else if (msg.event === "tlEnd_click") {
+    backgroundDraw(msg);
   }
 }
 
-//Stack functionality
+//Un-Redo Stack functionality
 function backwardsManager() {
   let still = convertCanvasToImage();
   if (stack.length < 10) {
@@ -156,7 +161,6 @@ function backwardsManager() {
   stackIndex = stack.length;
 }
 
-
 function backwardsDraw() {
   if (stack.length == 0) {
     backgroundDraw();
@@ -167,6 +171,17 @@ function backwardsDraw() {
     if (stackIndex > 0) {
       stackIndex = stackIndex - 1;
     }
+    backgroundDraw({
+      event: "Backwards_click",
+      src: stack[stackIndex - 1].src,
+    });
+    activeTool = undefined;
+    broadcast(
+      JSON.stringify({
+        event: "Backwards_click",
+        src: stack[stackIndex - 1].src,
+      })
+    );
   }
 }
 
@@ -180,13 +195,23 @@ function forwardDraw() {
     if (stackIndex <= 10) {
       stackIndex = stackIndex + 1;
     }
+    backgroundDraw({
+      event: "Forward_click",
+      src: stack[stackIndex + 1].src,
+    });
+    activeTool = undefined;
+    broadcast(
+      JSON.stringify({
+        event: "Forward_click",
+        src: stack[stackIndex + 1].src,
+      })
+    );
   }
 }
 
 // DRAWING ELEMENTS
 function draw(data) {
   if (data.lastPoint.x < 0 || data.lastPoint.x > 800) {
-    console.log("outside border");
     activeTool = undefined;
   }
   ctx.beginPath();
@@ -203,16 +228,14 @@ function draw(data) {
 function backgroundDraw(data) {
   let img = new Image();
   if (data != undefined) {
-    console.log("defined_data");
     img.onload = function () {
-      console.log("background loaded");
       activeCtx.drawImage(img, 0, 0, activeCanvas.width, activeCanvas.height);
     };
     img.src = data.src;
   } else {
-    console.log("undefined_data");
+
     img.onload = function () {
-      console.log("background loaded");
+
       activeCtx.drawImage(img, 0, 0, activeCanvas.width, activeCanvas.height);
     };
     img.src = "/resources/img/Arklov_Peak_objectives.png";
@@ -225,14 +248,14 @@ function backgroundDraw(data) {
 
 //TOKEN
 function tokenDraw(data) {
-  console.log("tokenDraw " + data.x + " " + data.y + " " + data.img);
+
   let img = new Image();
   img.onload = function () {
-    console.log("token loaded");
+
     activeCtx.drawImage(img, data.x - imgCenter, data.y - imgCenter);
   };
   img.src = data.img;
-  console.log("token ende");
+
 }
 
 function changeIconColor() {
@@ -256,7 +279,7 @@ function changeIconColor() {
     sniperIcon.src = "resources/img/sniperMapblue.png";
     assaultIcon.src = "resources/img/assaultMapblue.png";
     mpIcon.src = "resources/img/MPMapblue.png";
-    console.log("doing");
+
   }
 }
 
@@ -264,11 +287,11 @@ function changeIconColor() {
 function convertCanvasToImage() {
   let stillFrame = new Image();
   stillFrame.src = canvas.toDataURL();
-  console.log("stillframe created");
+
   timelineFrames[timelineIndex] = stillFrame;
   timelinePosition = timelineIndex;
   timelineIndex = timelineIndex + 1;
-  console.log(timelineFrames);
+
   return stillFrame;
 }
 
@@ -281,6 +304,18 @@ function tlStart() {
       0,
       activeCanvas.width,
       activeCanvas.height
+    );
+    activeTool = "tlStart";
+    backgroundDraw({
+      event: "tlStart_click",
+      src: timelineFrames[0].src,
+    });
+    activeTool = undefined;
+    broadcast(
+      JSON.stringify({
+        event: "tlStart_click",
+        src: timelineFrames[0].src,
+      })
     );
   }
   timelinePosition = 0;
@@ -295,6 +330,18 @@ function tlPrev() {
       activeCanvas.width,
       activeCanvas.height
     );
+    activeTool = "tlPrev";
+    backgroundDraw({
+      event: "tlPrev_click",
+      src: timelineFrames[timelinePosition - 1].src,
+    });
+    activeTool = undefined;
+    broadcast(
+      JSON.stringify({
+        event: "tlPrev_click",
+        src: timelineFrames[timelinePosition - 1].src,
+      })
+    );
     timelinePosition = timelinePosition - 1;
   }
 }
@@ -308,6 +355,18 @@ function tlNext() {
       activeCanvas.width,
       activeCanvas.height
     );
+    activeTool = "tlNext";
+    backgroundDraw({
+      event: "tlNext_click",
+      src: timelineFrames[timelinePosition + 1].src,
+    });
+    activeTool = undefined;
+    broadcast(
+      JSON.stringify({
+        event: "tlNext_click",
+        src: timelineFrames[timelinePosition + 1].src,
+      })
+    );
     timelinePosition = timelinePosition + 1;
   }
 }
@@ -320,6 +379,18 @@ function tlEnd() {
       0,
       activeCanvas.width,
       activeCanvas.height
+    );
+    activeTool = "tlEnd";
+    backgroundDraw({
+      event: "tlEnd_click",
+      src: timelineFrames[timelineFrames.length - 1].src,
+    });
+    activeTool = undefined;
+    broadcast(
+      JSON.stringify({
+        event: "tlEnd_click",
+        src: timelineFrames[timelineFrames.length - 1].src,
+      })
     );
     timelinePosition = timelineFrames.length - 1;
   } else {
@@ -384,37 +455,37 @@ btn10.addEventListener("click", () => {
 });
 
 grenade.addEventListener("click", function () {
-  console.log("grenade clicked");
+
   activeTool = "grenade";
 });
 
 flash.addEventListener("click", function () {
-  console.log("flash clicked");
+
   activeTool = "flash";
 });
 
 smoke.addEventListener("click", function () {
-  console.log("smoke clicked");
+
   activeTool = "smoke";
 });
 
 sniper.addEventListener("click", function () {
-  console.log("sniper clicked");
+
   activeTool = "sniper";
 });
 
 assault.addEventListener("click", function () {
-  console.log("assault clicked");
+
   activeTool = "assault";
 });
 
 mp.addEventListener("click", function () {
-  console.log("mp clicked");
+
   activeTool = "mp";
 });
 
 redButton.addEventListener("click", function () {
-  console.log("red clicked");
+
   backwardsManager();
   activeTool = "red";
   activeColor = "red";
@@ -424,7 +495,7 @@ redButton.addEventListener("click", function () {
 });
 
 blueButton.addEventListener("click", function () {
-  console.log("blue clicked");
+
   backwardsManager();
   activeTool = "blue";
   activeColor = "blue";
@@ -434,42 +505,54 @@ blueButton.addEventListener("click", function () {
 });
 
 timelineSaveButton.addEventListener("click", function () {
-  console.log("save stillframe");
+
   convertCanvasToImage();
 });
 
 undo.addEventListener("click", function () {
-  console.log("step back");
+
+  activeTool = "Backwards";
   backwardsDraw();
 });
 
 redo.addEventListener("click", function () {
-  console.log("step forward");
+
+  activeTool = "Forward";
   forwardDraw();
 });
 
 clearCanvasButton.addEventListener("click", function () {
-  console.log("clear canvas");
+
   activeCtx.clearRect(0, 0, canvas.width, canvas.height);
   backgroundDraw();
   clearTimeline();
+  activeTool = "Clear Canvas";
+  backgroundDraw({
+    event: "clearCanvas_click",
+  });
+  activeTool = undefined;
+  broadcast(
+    JSON.stringify({
+      event: "clearCanvas_click",
+    })
+  );
 });
 
 timelineStartButton.addEventListener("click", function () {
   tlStart();
-  console.log("timline Start");
+
 });
 timelinePrevButton.addEventListener("click", function () {
   tlPrev();
-  console.log("timline Prev");
+
 });
 timelineNextButton.addEventListener("click", function () {
   tlNext();
-  console.log("timline Next");
+
 });
 timelineEndButton.addEventListener("click", function () {
   tlEnd();
-  console.log("timline End");
+
 });
 
 function move(e) {
@@ -512,7 +595,7 @@ function down(e) {
   originPoint = { x: e.offsetX, y: e.offsetY };
 
   if (activeTool === "grenade") {
-    console.log("grenade placement");
+
     backwardsManager();
     tokenDraw({
       x: e.offsetX,
@@ -530,7 +613,7 @@ function down(e) {
     );
   } else if (activeTool === "flash") {
     backwardsManager();
-    console.log("flash placement");
+
     tokenDraw({
       x: e.offsetX,
       y: e.offsetY,
@@ -547,7 +630,7 @@ function down(e) {
     );
   } else if (activeTool === "smoke") {
     backwardsManager();
-    console.log("smoke placement");
+
     tokenDraw({
       x: e.offsetX,
       y: e.offsetY,
@@ -564,7 +647,7 @@ function down(e) {
     );
   } else if (activeTool === "sniper") {
     backwardsManager();
-    console.log("sniper placement");
+
     tokenDraw({
       x: e.offsetX,
       y: e.offsetY,
@@ -584,7 +667,7 @@ function down(e) {
 
   } else if (activeTool === "assault") {
     backwardsManager();
-    console.log("assault placement");
+
     tokenDraw({
       x: e.offsetX,
       y: e.offsetY,
@@ -601,7 +684,7 @@ function down(e) {
     );
   } else if (activeTool === "mp") {
     backwardsManager();
-    console.log("mp placement");
+
     tokenDraw({
       x: e.offsetX,
       y: e.offsetY,
@@ -635,7 +718,7 @@ function up() {
     );
     activeShape = undefined;
   } else if (activeTool === "azhir") {
-    console.log("azhir clicked");
+
     backgroundDraw({
       event: "azhir_click",
       src: "/resources/img/Azhir_Cave_objectives.png",
@@ -648,7 +731,7 @@ function up() {
       })
     );
   } else if (activeTool === "arklov") {
-    console.log("arklov clicked");
+
     backgroundDraw({
       event: "arklov_click",
       src: "/resources/img/Arklov_Peak_objectives.png",
@@ -661,7 +744,7 @@ function up() {
       })
     );
   } else if (activeTool === "Euphrates") {
-    console.log("Euphrates clicked");
+
     backgroundDraw({
       event: "Euphrates_click",
       src: "/resources/img/Euphrates_Bridge_objectives.png",
@@ -674,7 +757,7 @@ function up() {
       })
     );
   } else if (activeTool === "Grazna") {
-    console.log("Grazna clicked");
+
     backgroundDraw({
       event: "Grazna_click",
       src: "/resources/img/Grazna_Raid_objectives.png",
@@ -687,7 +770,7 @@ function up() {
       })
     );
   } else if (activeTool === "Gun_Runner") {
-    console.log("Gun_Runner clicked");
+
     backgroundDraw({
       event: "Gun_Runner_click",
       src: "/resources/img/Gun_Runner_objectives.png",
@@ -700,7 +783,7 @@ function up() {
       })
     );
   } else if (activeTool === "Hackney") {
-    console.log("Hackney clicked");
+
     backgroundDraw({
       event: "Hackney_click",
       src: "/resources/img/Hackney_Yard_objectives.png",
@@ -713,7 +796,7 @@ function up() {
       })
     );
   } else if (activeTool === "Picadilly") {
-    console.log("Picadilly clicked");
+
     backgroundDraw({
       event: "Picadilly_click",
       src: "/resources/img/Picadilly_objectives.png",
@@ -726,7 +809,7 @@ function up() {
       })
     );
   } else if (activeTool === "Rammaza") {
-    console.log("Rammaza clicked");
+
     backgroundDraw({
       event: "Rammaza_click",
       src: "/resources/img/Rammaza_objectives.png",
@@ -739,7 +822,7 @@ function up() {
       })
     );
   } else if (activeTool === "Shoot") {
-    console.log("Shoot clicked");
+
     backgroundDraw({
       event: "Shoot_click",
       src: "/resources/img/Shoot_House_objectives.png",
@@ -752,7 +835,7 @@ function up() {
       })
     );
   } else if (activeTool === "StPetrograd") {
-    console.log("StPetrograd clicked");
+
     backgroundDraw({
       event: "StPetrograd_click",
       src: "/resources/img/StPetrograd_objectives.png",
@@ -765,6 +848,7 @@ function up() {
       })
     );
   }
+
   lastPoint = undefined;
   originPoint = undefined;
 }
