@@ -2,27 +2,27 @@
 
 [Beschreiben Sie hier die einzelnen Teammitglieder mit Namen, E-Mail-Adresse, Github-Nutzer und Foto. Nennen Sie mindestens eine Komponenten der Anwendung, die in wesentlichen Teilen vom jeweiligen Teammitglied entwickelt wurde.]
 
-Alexander Obermaier 
-Alexander1.Obermaier@stud.uni-regensburg.de
-Obiboi 
-Bearbeitung der Maps (Spawns und Objectives recherchiert und hinzugefügt), Map-Archiv
+Alexander Obermaier <br>
+Alexander1.Obermaier@stud.uni-regensburg.de <br>
+Obiboi <br>
+Bearbeitung der Maps (Spawns und Objectives recherchiert und hinzugefügt), Map-Archiv <br>
 
 
-Marcus Achtnicht
-Marcus.Achtnicht@stud.uni-regensburg.de
-Chorkess
-Maps per Button wechseln
-Map-Archiv, Zeichenfunktion, Tokens, Radierfunktion
+Marcus Achtnicht <br>
+Marcus.Achtnicht@stud.uni-regensburg.de <br>
+Chorkess <br>
+Maps per Button wechseln <br>
+Map-Archiv, Zeichenfunktion, Tokens, Radierfunktion <br>
 
 
-Adem Demirsoy 
-Adem.Demirsoy@stud.uni-regensburg.de
-Demirboi 
-Timeline, Undo-Redo
+Adem Demirsoy  <br>
+Adem.Demirsoy@stud.uni-regensburg.de <br>
+Demirboi  <br>
+Timeline, Undo-Redo <br>
 
-Alexander Gebhard
-alexander.gebhard@stud.uni-regensburg.de
-Git: typhonn
+Alexander Gebhard <br>
+alexander.gebhard@stud.uni-regensburg.de <br>
+Git: typhonn <br>
 Backend, Server, Verbindung, Lobbysystem (Web-RTC)
 
 
