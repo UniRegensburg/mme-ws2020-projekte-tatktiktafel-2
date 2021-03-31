@@ -47,6 +47,18 @@ const flashImg = "resources/img/flashExpl.png";
 const smokeImg = "resources/img/smokeMap.png";
 const imgCenter = 30;
 const toolBlank = 'blank';
+//MAPS
+let btn1 = document.getElementById("arklov_btn");
+let btn2 = document.getElementById("azhir_btn");
+let btn3 = document.getElementById("euphrates_btn");
+let btn4 = document.getElementById("grazna_btn");
+let btn5 = document.getElementById("gunrunner_btn");
+let btn6 = document.getElementById("hackney_btn");
+let btn7 = document.getElementById("picadilly_btn");
+let btn8 = document.getElementById("rammaza_btn");
+let btn9 = document.getElementById("shoothouse_btn");
+let btn10 = document.getElementById("stpetrograd_btn");
+
 
 var stillFrame;
 
@@ -96,6 +108,8 @@ function onPeerData(id, data) {
     drawRect(msg);
   } else if (msg.event === "clear") {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+  } else if (msg.event === "arklov") {
+    console.log("change map");
   }
 }
 
@@ -140,7 +154,7 @@ function draw(data) {
 
 
 //DRAW BACKGROUND MAP
-function backgroundDraw() {
+function backgroundDraw(data) {
   let img = new Image();
 
   img.onload = function () {
@@ -151,70 +165,21 @@ function backgroundDraw() {
   //img.src = 'https://4.bp.blogspot.com/-LzenCqa3qCs/UUJO_H64QsI/AAAAAAAADSc/N5LZ8RTdq3I/s1600/Strike20mp_strike.png';
 
   //CHANGE MAP
-  let btn1 = document.getElementById("arklov_btn");
-  let btn2 = document.getElementById("azhir_btn");
-  let btn3 = document.getElementById("euphrates_btn");
-  let btn4 = document.getElementById("grazna_btn");
-  let btn5 = document.getElementById("gunrunner_btn");
-  let btn6 = document.getElementById("hackney_btn");
-  let btn7 = document.getElementById("picadilly_btn");
-  let btn8 = document.getElementById("rammaza_btn");
-  let btn9 = document.getElementById("shoothouse_btn");
-  let btn10 = document.getElementById("stpetrograd_btn");
 
-  btn1.addEventListener("click", () => {
-    img.src = "/resources/img/Arklov_Peak_objectives.png";
-    currentMap = img.src;
-  });
-  btn2.addEventListener("click", () => {
-    img.src = "/resources/img/Azhir_Cave_objectives.png";
-    currentMap = img.src;
-  });
-  btn3.addEventListener("click", () => {
-    img.src = "/resources/img/Euphrates_Bridge_objectives.png";
-    currentMap = img.src;
-  });
-  btn4.addEventListener("click", () => {
-    img.src = "/resources/img/Grazna_Raid_objectives.png";
-    currentMap = img.src;
-  });
-  btn5.addEventListener("click", () => {
-    img.src = "/resources/img/Gun_Runner_objectives.png";
-    currentMap = img.src;
-  });
-  btn6.addEventListener("click", () => {
-    img.src = "/resources/img/Hackney_Yard_objectives.png";
-    currentMap = img.src;
-  });
-  btn7.addEventListener("click", () => {
-    img.src = "/resources/img/Picadilly_objectives.png";
-    currentMap = img.src;
-  });
-  btn8.addEventListener("click", () => {
-    img.src = "/resources/img/Rammaza_objectives.png";
-    currentMap = img.src;
-  });
-  btn9.addEventListener("click", () => {
-    img.src = "/resources/img/Shoot_House_objectives.png";
-    currentMap = img.src;
-  });
-  btn10.addEventListener("click", () => {
-    img.src = "/resources/img/StPetrograd_objectives.png";
-    currentMap = img.src;
-  });
 }
-backgroundDraw();
+
 
 //TOKEN
-function tokenDraw(x, y, imgPath) {
+function tokenDraw(data) {
+  console.log("tokenDraw");
   let img = new Image();
 
   img.onload = function () {
     console.log("token loaded");
 
-    activeCtx.drawImage(img, x - imgCenter, y - imgCenter);
+    activeCtx.drawImage(data.img, data.x - imgCenter, data.y - imgCenter);
   };
-  img.src = imgPath;
+  img.src = data.img;
 }
 
 function changeIconColor() {
@@ -294,6 +259,45 @@ function clearTimeline() {
 }
 
 //INTERACTION
+btn1.addEventListener("click", () => {
+  activeTool = "arklov";
+});
+btn2.addEventListener("click", () => {
+  //img.src = "/resources/img/Azhir_Cave_objectives.png";
+  //currentMap = img.src;
+});
+btn3.addEventListener("click", () => {
+  //img.src = "/resources/img/Euphrates_Bridge_objectives.png";
+  //currentMap = img.src;
+});
+btn4.addEventListener("click", () => {
+  //img.src = "/resources/img/Grazna_Raid_objectives.png";
+  //currentMap = img.src;
+});
+btn5.addEventListener("click", () => {
+  //img.src = "/resources/img/Gun_Runner_objectives.png";
+  //currentMap = img.src;
+});
+btn6.addEventListener("click", () => {
+  // img.src = "/resources/img/Hackney_Yard_objectives.png";
+  //currentMap = img.src;
+});
+btn7.addEventListener("click", () => {
+  //img.src = "/resources/img/Picadilly_objectives.png";
+  //currentMap = img.src;
+});
+btn8.addEventListener("click", () => {
+  //img.src = "/resources/img/Rammaza_objectives.png";
+  // currentMap = img.src;
+});
+btn9.addEventListener("click", () => {
+  //img.src = "/resources/img/Shoot_House_objectives.png";
+  // currentMap = img.src;
+});
+btn10.addEventListener("click", () => {
+  //img.src = "/resources/img/StPetrograd_objectives.png";
+  //currentMap = img.src;
+});
 
 grenade.addEventListener("click", function () {
   console.log("grenade clicked");
@@ -421,7 +425,18 @@ function down(e) {
 
   if (activeTool === "grenade") {
     console.log("grenade placement");
-    tokenDraw(e.offsetX, e.offsetY, grenadeImg);
+    tokenDraw({
+      x: e.offsetX,
+      y: e.offsetY,
+      img: "resources/img/grenadeExpl.png",
+    });
+    activeTool = undefined;
+  } else if (activeTool === "arklov") {
+    console.log("arklov clicked");
+    backgroundDraw({
+      event: e.offsetX,
+      src: "/resources/img/Azhir_Cave_objectives.png",
+    });
     activeTool = undefined;
   }
   else if (activeTool === "flash") {
@@ -455,9 +470,9 @@ function up() {
   if (activeShape) {
     drawRect(activeShape, true);
     broadcast(JSON.stringify(Object.assign({
-            event: 'drawRect',
-            commit: true,
-        }, activeShape)));
+      event: 'drawRect',
+      commit: true,
+    }, activeShape)));
     activeShape = undefined;
   }
   lastPoint = undefined;
