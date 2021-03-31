@@ -25,6 +25,7 @@ var timelineSaveButton = document.getElementById("saveTimelineFrame");
 var clearCanvasButton = document.getElementById("clearCanvas");
 var penColorReference = document.getElementById("penColRef");
 var undoButton = document.getElementById("undo");
+var redoButton = document.getElementById("redo");
 var timelineStartButton = document.getElementById("timeline start");
 var timelinePrevButton = document.getElementById("timeline prev");
 var timelineNextButton = document.getElementById("timeline next");
@@ -34,7 +35,6 @@ var stack = [];
 var timelineFrames = [];
 var timelineIndex = 0;
 var timelinePosition = 0;
-var currentMap = "/resources/img/Arklov_Peak_objectives.png";
 
 var sniperImg = "resources/img/sniperMap.png";
 var assaultImg = "resources/img/assaultMap.png";
@@ -145,25 +145,42 @@ function onPeerData(id, data) {
 }
 
 //Stack functionality
-function stackManager() {
+function backwardsManager() {
   let still = convertCanvasToImage();
   if (stack.length < 10) {
     stack.push(still);
   } else {
     stack.splice(0, 1);
-    console.log(stack);
     stack.push(still);
+  }
+  stackIndex = stack.length;
+}
+
+
+function backwardsDraw() {
+  if (stack.length == 0) {
+    backgroundDraw();
+  } else {
+    let img = new Image();
+    img = stack[stackIndex - 1];
+    activeCtx.drawImage(img, 0, 0, activeCanvas.width, activeCanvas.height);
+    if (stackIndex > 0) {
+      stackIndex = stackIndex - 1;
+    }
   }
 }
 
-function drawStack() {
-  let img = new Image();
-
-  img.onload = function () {
-    console.log("stack loaded");
+function forwardDraw() {
+  if (stack.length == 0) {
+    backgroundDraw();
+  } else {
+    let img = new Image();
+    img = stack[stackIndex + 1];
     activeCtx.drawImage(img, 0, 0, activeCanvas.width, activeCanvas.height);
-  };
-  img.src = stack[0];
+    if (stackIndex <= 10) {
+      stackIndex = stackIndex + 1;
+    }
+  }
 }
 
 // DRAWING ELEMENTS
@@ -210,10 +227,8 @@ function backgroundDraw(data) {
 function tokenDraw(data) {
   console.log("tokenDraw " + data.x + " " + data.y + " " + data.img);
   let img = new Image();
-
   img.onload = function () {
     console.log("token loaded");
-
     activeCtx.drawImage(img, data.x - imgCenter, data.y - imgCenter);
   };
   img.src = data.img;
@@ -400,6 +415,7 @@ mp.addEventListener("click", function () {
 
 redButton.addEventListener("click", function () {
   console.log("red clicked");
+  backwardsManager();
   activeTool = "red";
   activeColor = "red";
   changeIconColor();
@@ -409,6 +425,7 @@ redButton.addEventListener("click", function () {
 
 blueButton.addEventListener("click", function () {
   console.log("blue clicked");
+  backwardsManager();
   activeTool = "blue";
   activeColor = "blue";
   changeIconColor();
@@ -418,12 +435,17 @@ blueButton.addEventListener("click", function () {
 
 timelineSaveButton.addEventListener("click", function () {
   console.log("save stillframe");
-  let still = convertCanvasToImage();
-  document.body.appendChild(still);
+  convertCanvasToImage();
 });
 
 undo.addEventListener("click", function () {
   console.log("step back");
+  backwardsDraw();
+});
+
+redo.addEventListener("click", function () {
+  console.log("step forward");
+  forwardDraw();
 });
 
 clearCanvasButton.addEventListener("click", function () {
@@ -491,6 +513,7 @@ function down(e) {
 
   if (activeTool === "grenade") {
     console.log("grenade placement");
+    backwardsManager();
     tokenDraw({
       x: e.offsetX,
       y: e.offsetY,
@@ -506,6 +529,7 @@ function down(e) {
       })
     );
   } else if (activeTool === "flash") {
+    backwardsManager();
     console.log("flash placement");
     tokenDraw({
       x: e.offsetX,
@@ -522,6 +546,7 @@ function down(e) {
       })
     );
   } else if (activeTool === "smoke") {
+    backwardsManager();
     console.log("smoke placement");
     tokenDraw({
       x: e.offsetX,
@@ -538,6 +563,7 @@ function down(e) {
       })
     );
   } else if (activeTool === "sniper") {
+    backwardsManager();
     console.log("sniper placement");
     tokenDraw({
       x: e.offsetX,
@@ -545,16 +571,19 @@ function down(e) {
       img: sniperImg,
     });
     activeTool = undefined;
-    if (activeColor === "red") { }
-    broadcast(
-      JSON.stringify({
-        event: "sniper",
-        x: e.offsetX,
-        y: e.offsetY,
-        img: sniperImg,
-      })
-    );
+    if (activeColor === "red") {
+      broadcast(
+        JSON.stringify({
+          event: "sniper",
+          x: e.offsetX,
+          y: e.offsetY,
+          img: sniperImg,
+        })
+      );
+    }
+
   } else if (activeTool === "assault") {
+    backwardsManager();
     console.log("assault placement");
     tokenDraw({
       x: e.offsetX,
@@ -571,6 +600,7 @@ function down(e) {
       })
     );
   } else if (activeTool === "mp") {
+    backwardsManager();
     console.log("mp placement");
     tokenDraw({
       x: e.offsetX,
